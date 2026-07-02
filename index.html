@@ -1,1068 +1,306 @@
-<!DOCTYPE html>
-<html lang="th">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1">
-<title>AUM Fuji Marathon OS</title>
-<script>
-(function(){
-  try{
-    var t = localStorage.getItem("aum_fuji_sep_theme");
-    if(t!=="dark" && t!=="light"){
-      t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
-    }
-    document.documentElement.setAttribute("data-theme", t);
-  }catch(e){}
-})();
-</script>
-<style>
-:root{
-  --cream:#FBF4EA;
-  --paper:#FFFEFB;
-  --paper-soft:#FFF8EE;
-  --ink:#2E2A24;
-  --ink-soft:#6E6557;
-  --muted:#A39B8C;
-  --line:#EFE6D6;
-
-  --green:#AFCFA0;   --green-ink:#4D7A48;   --green-bg:#EAF3E3;
-  --yellow:#F2CE82;  --yellow-ink:#92711F;  --yellow-bg:#FBF1DC;
-  --pink:#F2A9BC;    --pink-ink:#C04568;    --pink-bg:#FCEAEF;
-  --blue:#A7C8E6;    --blue-ink:#3D6E96;    --blue-bg:#E9F1FA;
-  --pink-strong:#EF5C84;
-
-  --black:#221F1A;
-
-  --radius-lg:28px;
-  --radius-md:20px;
-  --radius-sm:14px;
-  --radius-pill:999px;
-
-  --shadow:0 14px 32px rgba(46,35,18,0.10);
-  --shadow-sm:0 6px 16px rgba(46,35,18,0.07);
-  --shadow-press:0 2px 8px rgba(46,35,18,0.10);
+<!DOCTYPE html><html lang="th"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1"><title>AUM Fuji Marathon OS</title><script>(function(){
+try{
+var t = localStorage.getItem("aum_fuji_sep_theme");
+if(t!=="dark" && t!=="light"){
+t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
 }
-
-[data-theme="dark"]{
-  --cream:#1B1814;
-  --paper:#252019;
-  --paper-soft:#2C261E;
-  --ink:#F2ECE0;
-  --ink-soft:#C9C0AF;
-  --muted:#8B8275;
-  --line:#3A332B;
-
-  --green-bg:rgba(175,207,160,0.16);  --green-ink:#BFE0AE;
-  --yellow-bg:rgba(242,206,130,0.16); --yellow-ink:#F2CE82;
-  --pink-bg:rgba(242,169,188,0.16);   --pink-ink:#F2A9BC;
-  --blue-bg:rgba(167,200,230,0.16);   --blue-ink:#A7C8E6;
-
-  --black:#332D24;
-
-  --shadow:0 14px 32px rgba(0,0,0,0.45);
-  --shadow-sm:0 6px 16px rgba(0,0,0,0.35);
-  --shadow-press:0 2px 8px rgba(0,0,0,0.3);
-}
-[data-theme="dark"] .hero,
-[data-theme="dark"] .task-card,
-[data-theme="dark"] .score-card,
-[data-theme="dark"] .journey,
-[data-theme="dark"] .sheet,
-[data-theme="dark"] .moment-empty,
-[data-theme="dark"] .moment-photo-wrap{
-  border:1px solid var(--line);
-}
-body, .hero, .task-card, .score-card, .journey, .sheet, .bottomnav, .day-chip, .tick-btn, .badge{
-  transition:background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
-}
-
-*{box-sizing:border-box;}
-html,body{margin:0;padding:0;}
-body{
-  background:var(--cream);
-  color:var(--ink);
-  font-family: ui-rounded, "SF Pro Rounded", -apple-system, "Segoe UI", system-ui, Roboto, "Helvetica Neue", "Noto Sans Thai", sans-serif;
-  -webkit-font-smoothing:antialiased;
-  min-height:100vh;
-}
-button{font-family:inherit;}
-.app{
-  max-width:480px;
-  margin:0 auto;
-  padding:20px 16px 120px;
-  position:relative;
-}
-
-/* ---------- header ---------- */
-.header{display:flex;align-items:center;gap:10px;padding:2px 2px 10px;}
-.header-tap{
-  flex:1; min-width:0; display:flex; align-items:center; gap:12px;
-  border:none; background:none; padding:0; text-align:left; cursor:pointer;
-}
-.header-tap:active{opacity:0.7;}
-.avatar{
-  width:48px;height:48px;border-radius:50%;
-  background:linear-gradient(135deg,var(--pink) 0%, var(--yellow) 50%, var(--blue) 100%);
-  display:flex;align-items:center;justify-content:center;
-  font-weight:800;font-size:18px;color:#fff;letter-spacing:0.5px;
-  box-shadow:var(--shadow-sm);
-  flex-shrink:0;
-  background-size:cover; background-position:center;
-}
-.avatar.has-photo{background-image:none; background-color:var(--paper-soft);}
-.avatar.has-photo span{display:none;}
-.avatar-lg{width:60px;height:60px;font-size:22px;}
-.profile-avatar-row{display:flex; align-items:center; gap:14px; margin-bottom:18px;}
-.avatar-actions{display:flex; flex-direction:column; gap:8px;}
-.avatar-btn{
-  border:none; background:var(--cream); color:var(--ink);
-  font-size:12px; font-weight:700; padding:9px 14px; border-radius:var(--radius-pill);
-  text-align:center;
-}
-.avatar-btn.ghost{background:none; color:var(--pink-ink);}
-.avatar-btn:active{opacity:0.7;}
-.header-text{flex:1;min-width:0;}
-.greeting{font-size:18px;font-weight:800;margin:0;line-height:1.25; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-.subgreeting{font-size:12px;color:var(--ink-soft);margin:2px 0 0;font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-.header-actions{display:flex; align-items:center; gap:8px; flex-shrink:0;}
-.icon-btn{
-  width:36px;height:36px;border-radius:50%;border:none;
-  background:var(--paper-soft); color:var(--ink);
-  display:flex;align-items:center;justify-content:center; flex-shrink:0;
-}
-.icon-btn svg{width:17px;height:17px;}
-.icon-btn:active{transform:scale(0.92);}
-.icon-btn .icon-sun{display:none;}
-.icon-btn .icon-moon{display:block;}
-[data-theme="dark"] .icon-btn .icon-sun{display:block;}
-[data-theme="dark"] .icon-btn .icon-moon{display:none;}
-.today-btn{
-  border:none;background:var(--paper-soft);color:var(--ink);
-  font-size:12.5px;font-weight:700;
-  padding:9px 14px;border-radius:var(--radius-pill);
-  flex-shrink:0;
-}
-.today-btn:active{transform:scale(0.95);}
-
-.bio-row{
-  display:block; width:100%; text-align:left; border:none; background:none;
-  padding:0 2px 16px; margin-top:0;
-}
-.bio-text{font-size:12.5px; font-style:italic; color:var(--ink-soft); font-weight:600; line-height:1.5;}
-.bio-text.placeholder{color:var(--muted);}
-
-/* ---------- tab panels ---------- */
-.tab-panel{display:none;}
-.tab-panel.active{display:block;}
-
-/* ---------- hero (week nav + day strip), merged Home+Week ---------- */
-.hero{
-  background:var(--paper);
-  border-radius:var(--radius-lg);
-  padding:18px 16px 16px;
-  box-shadow:var(--shadow);
-  margin-bottom:16px;
-}
-.week-nav{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.wn-btn{
-  width:34px;height:34px;border-radius:50%;border:none;
-  background:var(--paper-soft);
-  font-size:16px;font-weight:800;color:var(--ink);
-  display:flex;align-items:center;justify-content:center;
-}
-.wn-btn:disabled{opacity:0.3;}
-.wn-btn:active:not(:disabled){transform:scale(0.92);}
-.week-pill{
-  flex:1;text-align:center;
-  font-size:13px;font-weight:800;
-  background:var(--cream);
-  border-radius:var(--radius-pill);
-  padding:8px 10px;
-  display:flex;flex-direction:column;gap:1px;
-}
-.week-pill small{font-weight:700;color:var(--ink-soft);font-size:10.5px;letter-spacing:0.3px;}
-.date-range{
-  text-align:center;font-size:11.5px;color:var(--muted);
-  margin-top:9px;font-weight:600;
-}
-
-.day-selector{
-  display:flex; gap:7px; overflow-x:auto; scrollbar-width:none;
-  padding:14px 2px 4px;
-}
-.day-selector::-webkit-scrollbar{display:none;}
-.day-chip{
-  flex:0 0 auto; width:76px;
-  display:flex; flex-direction:column;
-  border-radius:16px;
-  background:var(--cream);
-  border:2px solid transparent;
-  position:relative;
-  user-select:none; -webkit-user-select:none;
-  overflow:visible;
-}
-.day-chip.active{ background:var(--black);}
-.day-chip.active .dc-head-label,.day-chip.active .dc-head-num{color:rgba(255,255,255,0.7); }
-.day-chip.active .dc-head-num{color:#fff;}
-.day-chip.is-today:not(.active) .dc-head-num::after{
-  content:""; display:inline-block; width:5px;height:5px; border-radius:50%;
-  background:var(--pink-strong); margin-left:3px; vertical-align:middle;
-}
-.dc-head{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:8px 8px 5px;
-}
-.dc-head-label{font-size:10px; font-weight:800; color:var(--ink-soft);}
-.dc-head-num{font-size:13px; font-weight:800; color:var(--ink);}
-.dc-rows{display:flex; flex-direction:column; gap:4px; padding:0 6px 8px;}
-
-/* ---- draggable pill rows inside each chip ---- */
-.dc-row{
-  display:flex; align-items:center; gap:5px;
-  border-radius:9px; padding:5px 7px;
-  font-size:10px; font-weight:800;
-  touch-action:none; cursor:grab; position:relative;
-  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
-}
-.dc-row.weight-row{ background:var(--green-bg); color:var(--green-ink);}
-.dc-row.run-row{ background:var(--blue-bg); color:var(--blue-ink);}
-.day-chip.active .dc-row.weight-row{ background:rgba(175,207,160,0.18); color:#BFE0AE;}
-.day-chip.active .dc-row.run-row{ background:rgba(167,200,230,0.18); color:#A7C8E6;}
-.dc-row-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
-.dc-row.weight-row .dc-row-dot{background:var(--green-ink);}
-.dc-row.run-row .dc-row-dot{background:var(--blue-ink);}
-.dc-row.dragging-pill{
-  z-index:9; box-shadow:var(--shadow); opacity:0.9; cursor:grabbing;
-  border:1.5px solid var(--ink);
-}
-.dc-row.drop-target-row{box-shadow:0 0 0 2px var(--pink-strong) inset; opacity:1;}
-.dc-done-dots{display:flex; justify-content:center; gap:3px; padding:0 0 7px;}
-.dc-done-dot{width:5px;height:5px;border-radius:50%; background:var(--line);}
-.dc-done-dot.on{ background:var(--pink-strong);}
-.day-chip.active .dc-done-dot{ background:rgba(255,255,255,0.3);}
-.day-chip.active .dc-done-dot.on{ background:#fff;}
-.reset-order{
-  display:block; margin:6px auto 0; border:none; background:none;
-  font-size:11px; font-weight:700; color:var(--muted); text-decoration:underline;
-}
-.drag-hint{
-  text-align:center; font-size:10.5px; color:var(--muted); font-weight:600; margin-top:2px;
-}
-
-/* ---------- daily header ---------- */
-.daily-header{
-  display:flex; align-items:center; justify-content:space-between;
-  padding:2px 4px 12px;
-}
-.daily-header .dh-day{font-size:18px;font-weight:800;}
-.daily-header .dh-date{font-size:12px;color:var(--ink-soft);font-weight:700;margin-top:1px;}
-.badge{
-  font-size:10.5px;font-weight:800;padding:6px 12px;border-radius:var(--radius-pill);
-  background:var(--black); color:#fff;
-}
-
-/* ---------- task cards ---------- */
-.task-card{
-  background:var(--paper); border-radius:var(--radius-md);
-  padding:16px 16px 14px; box-shadow:var(--shadow-sm); margin-bottom:14px;
-}
-.task-top{display:flex; align-items:flex-start; justify-content:space-between; gap:10px;}
-.task-info{flex:1; min-width:0;}
-.task-label{
-  font-size:10.5px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;
-  color:var(--muted);
-}
-.task-title{font-size:17px;font-weight:800;margin:3px 0 3px;}
-.task-desc{font-size:13px;color:var(--ink-soft);font-weight:600;line-height:1.5;margin:0;}
-.tick-btn{
-  width:34px;height:34px;border-radius:50%;border:2px solid var(--line);
-  background:var(--paper); flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  margin-top:2px;
-}
-.tick-btn svg{width:16px;height:16px;opacity:0;}
-.tick-btn.on{background:var(--pink-strong); border-color:var(--pink-strong);}
-.tick-btn.on svg{opacity:1;}
-.tick-btn:active{transform:scale(0.9);}
-.note-text{font-size:12px;color:var(--pink-ink);font-weight:700;margin-top:10px;line-height:1.5;}
-.card-link{
-  border:none; background:none; padding:11px 0 0; margin-top:2px;
-  font-size:12.5px; font-weight:800; color:var(--ink-soft);
-  display:flex; align-items:center; gap:4px;
-}
-.card-link:active{opacity:0.6;}
-
-.fuel-line{font-size:12.5px; color:var(--ink-soft); font-weight:600; line-height:1.6; padding:2px 4px 0;}
-.fuel-line b{color:var(--ink); font-weight:800;}
-
-/* ---------- moment / daily photo card ---------- */
-.moment-card{margin-bottom:14px;}
-.moment-empty{
-  border:2px dashed var(--line); border-radius:var(--radius-md);
-  padding:26px 16px; text-align:center; color:var(--muted);
-  font-size:12.5px; font-weight:600; line-height:1.5;
-  display:flex; flex-direction:column; align-items:center; gap:8px;
-}
-.moment-empty svg{opacity:0.55;}
-.moment-photo-wrap{
-  position:relative; border-radius:var(--radius-md); overflow:hidden;
-  box-shadow:var(--shadow-sm); background:var(--paper);
-}
-.moment-photo-wrap img{width:100%; display:block; max-height:300px; object-fit:cover;}
-.moment-tag{
-  position:absolute; left:10px; bottom:10px; font-size:10.5px; font-weight:800;
-  color:#fff; background:rgba(20,16,10,0.5); padding:5px 10px; border-radius:var(--radius-pill);
-}
-.moment-remove{
-  position:absolute; top:8px; right:8px; width:30px;height:30px;border-radius:50%;
-  background:rgba(20,16,10,0.55); border:none; color:#fff;
-  display:flex; align-items:center; justify-content:center;
-}
-
-/* ---------- section header ---------- */
-.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;padding:0 2px;}
-.section-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--ink-soft);}
-
-/* ---------- stats tab ---------- */
-.score-card{
-  background:var(--paper); border-radius:var(--radius-lg); padding:20px 18px;
-  box-shadow:var(--shadow); text-align:center; margin-bottom:16px;
-}
-.score-label{
-  font-size:11.5px;font-weight:700;color:var(--ink-soft);
-  text-transform:uppercase;letter-spacing:0.6px;
-}
-.score-row{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin:10px 0 6px;}
-.score-num{font-size:50px;font-weight:800;line-height:0.9;letter-spacing:-1px;}
-.score-suffix{font-size:17px;font-weight:700;color:var(--muted);margin-bottom:6px;}
-.streak-text{font-size:12.5px;font-weight:700;color:var(--pink-ink);}
-
-.journey{background:var(--paper); border-radius:var(--radius-md); padding:16px 16px 17px; box-shadow:var(--shadow-sm); margin-bottom:16px;}
-.journey-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px;}
-.journey-top .jt-label{font-size:13px;font-weight:800;}
-.journey-top .jt-val{font-size:12px;font-weight:700;color:var(--ink-soft);}
-.journey-track{display:flex; height:14px; border-radius:8px; overflow:visible; gap:2px; position:relative;}
-.journey-seg{height:100%; border-radius:4px;}
-.journey-seg:first-child{border-radius:8px 4px 4px 8px;}
-.journey-seg:last-child{border-radius:4px 8px 8px 4px;}
-.journey-seg.base{background:var(--green);}
-.journey-seg.build{background:var(--yellow);}
-.journey-seg.endurance{background:var(--blue);}
-.journey-seg.specific{background:var(--pink);}
-.journey-seg.peak{background:var(--black);}
-.journey-marker{
-  position:absolute; top:-5px; width:3px; height:24px; background:var(--ink);
-  border-radius:2px; display:none;
-}
-.journey-labels{display:flex; justify-content:space-between; margin-top:8px;}
-.journey-labels span{font-size:9.5px; font-weight:700; color:var(--muted);}
-.journey-stats{display:flex; gap:10px; margin-top:14px;}
-.jstat{flex:1; background:var(--cream); border-radius:14px; padding:10px 8px; text-align:center;}
-.jstat .js-num{font-size:18px; font-weight:800;}
-.jstat .js-lab{font-size:10px; font-weight:700; color:var(--ink-soft); margin-top:1px;}
-
-.tips-card{background:var(--black); border-radius:var(--radius-md); padding:18px 16px; color:#fff;}
-.tips-card .tc-title{font-size:13px; font-weight:800; text-transform:uppercase; letter-spacing:0.5px; opacity:0.6; margin-bottom:10px;}
-.tips-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
-.tips-list li{font-size:13px; font-weight:600; line-height:1.45; padding-left:14px; position:relative;}
-.tips-list li::before{content:""; position:absolute; left:0; top:7px; width:5px;height:5px;border-radius:50%; background:var(--pink-strong);}
-
-/* ---------- bottom nav ---------- */
-.bottomnav{
-  position:fixed; bottom:18px; left:50%; transform:translateX(-50%);
-  width:min(78%,300px);
-  background:var(--black);
-  border-radius:var(--radius-pill);
-  display:flex; align-items:center; justify-content:space-around;
-  padding:8px; box-shadow:0 14px 30px rgba(0,0,0,0.28);
-  z-index:40;
-}
-.nav-btn{
-  border:none; background:transparent; color:rgba(255,255,255,0.5);
-  display:flex; flex-direction:column; align-items:center; gap:4px;
-  font-size:10px; font-weight:700; padding:6px 18px; border-radius:18px;
-}
-.nav-btn svg{width:19px;height:19px;}
-.nav-btn.active{color:#fff; background:rgba(255,255,255,0.12);}
-.nav-plus{
-  width:48px;height:48px;border-radius:50%;border:none;flex-shrink:0;
-  background:var(--pink-strong); color:#fff;
-  display:flex; align-items:center; justify-content:center;
-  box-shadow:0 8px 18px rgba(239,92,132,0.45);
-}
-.nav-plus svg{width:20px;height:20px;}
-.nav-plus:active{transform:scale(0.92);}
-
-/* ---------- toast ---------- */
-.toast{
-  position:fixed; bottom:92px; left:50%; transform:translateX(-50%) translateY(14px);
-  background:var(--black); color:#fff; font-size:12.5px; font-weight:700;
-  padding:10px 18px; border-radius:var(--radius-pill);
-  opacity:0; pointer-events:none; transition:all 0.25s ease; z-index:70; white-space:nowrap;
-}
-.toast.show{opacity:1; transform:translateX(-50%) translateY(0);}
-
-/* ---------- bottom sheet ---------- */
-.overlay{
-  position:fixed; inset:0; background:rgba(30,24,14,0.42);
-  opacity:0; pointer-events:none; transition:opacity 0.25s ease; z-index:60;
-}
-.overlay.open{opacity:1; pointer-events:auto;}
-.sheet{
-  position:fixed; left:0; right:0; bottom:0; max-width:480px; margin:0 auto;
-  background:var(--paper); border-radius:26px 26px 0 0;
-  padding:10px 20px 28px; max-height:78vh; overflow-y:auto;
-  transform:translateY(100%); transition:transform 0.3s cubic-bezier(.22,.9,.32,1);
-  z-index:61; box-shadow:0 -10px 40px rgba(40,30,18,0.18);
-}
-.sheet.open{transform:translateY(0);}
-.sheet-handle{width:38px;height:5px;background:var(--line); border-radius:4px; margin:6px auto 14px;}
-.sheet-head{display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:14px;}
-.sheet-title{font-size:18px;font-weight:800; margin:0;}
-.sheet-sub{font-size:12.5px; color:var(--ink-soft); font-weight:700; margin:3px 0 0;}
-.sheet-close{
-  border:none; background:var(--cream); width:32px;height:32px;border-radius:50%;
-  color:var(--ink-soft); flex-shrink:0;
-  display:flex; align-items:center; justify-content:center;
-}
-.ex-list{list-style:none; margin:0; padding:0; display:flex; flex-direction:column; gap:9px;}
-.ex-item{
-  display:flex; align-items:center; gap:12px;
-  background:var(--cream); border-radius:14px; padding:12px 13px;
-}
-.ex-num{
-  width:24px;height:24px;border-radius:50%; background:var(--paper); flex-shrink:0;
-  display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:800; color:var(--ink-soft);
-}
-.ex-text{font-size:13.5px; font-weight:700; line-height:1.4;}
-.sheet-foot-note{
-  margin-top:14px; font-size:12px; font-weight:700; color:var(--pink-ink);
-  background:var(--pink-bg); border-radius:12px; padding:10px 12px; line-height:1.5;
-}
-.sheet-back{
-  width:100%; margin-top:16px; border:none; padding:13px 0; border-radius:var(--radius-pill);
-  background:var(--black); color:#fff; font-size:13.5px; font-weight:800;
-}
-
-.overview-btn{
-  width:100%; display:flex; align-items:center; justify-content:space-between;
-  background:var(--paper); border:none; border-radius:var(--radius-md);
-  padding:15px 16px; font-size:13.5px; font-weight:800; color:var(--ink);
-  box-shadow:var(--shadow-sm); margin-bottom:16px;
-}
-.overview-btn:active{transform:scale(0.98);}
-.ob-arrow{color:var(--muted); font-weight:800;}
-
-.week-row{
-  display:flex; align-items:center; justify-content:space-between; gap:10px;
-  background:var(--cream); border:2px solid transparent; border-radius:14px;
-  padding:11px 13px; width:100%; text-align:left;
-}
-.week-row.current{border-color:var(--pink-strong);}
-.wr-left{display:flex; align-items:center; gap:12px; min-width:0;}
-.wr-num{
-  width:30px;height:30px;border-radius:50%; background:var(--paper); flex-shrink:0;
-  display:flex; align-items:center; justify-content:center; font-size:11.5px; font-weight:800; color:var(--ink-soft);
-}
-.wr-info{min-width:0;}
-.wr-phase{font-size:13px;font-weight:800;}
-.wr-date{font-size:11px;color:var(--ink-soft);font-weight:600;margin-top:1px;}
-.wr-long{font-size:12px;font-weight:800; color:var(--blue-ink); flex-shrink:0; text-align:right; white-space:nowrap;}
-
-.form-group{margin-bottom:14px;}
-.form-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;color:var(--muted);margin-bottom:6px;display:block;}
-.form-input,.form-textarea{
-  width:100%; border:2px solid var(--line); background:var(--cream); color:var(--ink);
-  border-radius:14px; padding:11px 13px; font-size:14px; font-weight:600; font-family:inherit;
-}
-.form-textarea{resize:vertical; min-height:64px; line-height:1.5;}
-.form-input:focus,.form-textarea:focus{outline:none; border-color:var(--pink-strong);}
-.form-hint{font-size:11.5px; color:var(--muted); font-weight:600; margin-top:14px; line-height:1.5;}
-
-.version-tag{
-  text-align:center; font-size:10.5px; color:var(--muted); font-weight:700;
-  letter-spacing:0.3px; opacity:0.6; margin:22px 0 0;
-}
-
-@media (prefers-reduced-motion: reduce){
-  *{transition:none !important; animation:none !important;}
-}
-</style>
-</head>
-<body>
-
-<div class="app">
-
-  <div class="header">
-    <button class="header-tap" id="header-tap" aria-label="edit profile">
-      <span class="avatar" id="avatar"><span id="avatar-letter">A</span></span>
-      <span class="header-text">
-        <p class="greeting" id="greeting-text">Aum, ready to train?</p>
-        <p class="subgreeting" id="subgreeting-text">Fuji Marathon • Hybrid Athlete</p>
-      </span>
-    </button>
-    <div class="header-actions">
-      <button class="icon-btn" id="theme-toggle" aria-label="toggle dark mode">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg>
-      </button>
-      <button class="today-btn" id="btn-today">วันนี้</button>
-    </div>
-  </div>
-
-  <button class="bio-row" id="bio-row">
-    <span class="bio-text" id="bio-text">เพิ่มคำคมหรือ bio ของคุณ</span>
-  </button>
-
-  <!-- ============ HOME (merged with Week) ============ -->
-  <div class="tab-panel active" id="panel-home">
-
-    <div class="hero">
-      <div class="week-nav">
-        <button class="wn-btn" id="wn-prev">‹</button>
-        <div class="week-pill">
-          <span id="hero-week-label">Week 1 / 23</span>
-          <small id="hero-phase-label">Base</small>
-        </div>
-        <button class="wn-btn" id="wn-next">›</button>
-      </div>
-      <div class="date-range" id="hero-date-range">22 มิ.ย. – 28 มิ.ย.</div>
-
-      <div class="day-selector" id="day-selector"></div>
-      <div class="drag-hint">ลากแถว Workout หรือ Running เพื่อสลับแยกกันได้</div>
-      <button class="reset-order" id="reset-order" style="display:none;">รีเซ็ตลำดับสัปดาห์นี้</button>
-    </div>
-
-    <div class="daily-header">
-      <div>
-        <div class="dh-day" id="dh-day">วันเสาร์</div>
-        <div class="dh-date" id="dh-date">27 มิ.ย. 2026</div>
-      </div>
-      <div class="badge" id="dh-badge" style="display:none;">Today</div>
-    </div>
-
-    <div class="task-card" id="card-weight">
-      <div class="task-top">
-        <div class="task-info">
-          <span class="task-label">Workout</span>
-          <p class="task-title" id="w-title">Legs</p>
-          <p class="task-desc" id="w-desc">-</p>
-        </div>
-        <button class="tick-btn" id="tick-weight" aria-label="mark workout complete">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-      <p class="note-text" id="w-note" style="display:none;"></p>
-      <button class="card-link" data-open="weight">ดูรายละเอียดโปรแกรม ›</button>
-    </div>
-
-    <div class="task-card" id="card-run">
-      <div class="task-top">
-        <div class="task-info">
-          <span class="task-label">Running</span>
-          <p class="task-title" id="r-title">Long Run</p>
-          <p class="task-desc" id="r-desc">-</p>
-        </div>
-        <button class="tick-btn" id="tick-run" aria-label="mark run complete">
-          <svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </button>
-      </div>
-      <button class="card-link" data-open="run">ดูรายละเอียดโปรแกรม ›</button>
-    </div>
-
-    <div class="moment-card" id="moment-card">
-      <div class="moment-empty" id="moment-empty">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.2"/></svg>
-        <p>ยังไม่มีรูปของวันนี้ • แตะปุ่ม + ด้านล่างเพื่อเพิ่มโมเมนต์</p>
-      </div>
-      <div class="moment-photo-wrap" id="moment-photo-wrap" style="display:none;">
-        <img id="moment-photo" src="" alt="Daily moment">
-        <span class="moment-tag">โมเมนต์วันนี้</span>
-        <button class="moment-remove" id="moment-remove" aria-label="remove photo">
-          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>
-        </button>
-      </div>
-    </div>
-
-    <p class="fuel-line" id="f-desc"><b>Fuel —</b> -</p>
-  </div>
-
-  <!-- ============ STATS + TIPS ============ -->
-  <div class="tab-panel" id="panel-stats">
-    <div class="section-head"><span class="section-title">Progress</span></div>
-
-    <div class="score-card">
-      <span class="score-label">weekly completion</span>
-      <div class="score-row">
-        <span class="score-num" id="hero-score">0</span>
-        <span class="score-suffix">/10</span>
-      </div>
-      <div class="streak-text" id="hero-streak"></div>
-    </div>
-
-    <div class="journey">
-      <div class="journey-top">
-        <span class="jt-label" id="jr-phase">Base Phase</span>
-        <span class="jt-val" id="jr-volume">25–32 กม./สัปดาห์</span>
-      </div>
-      <div class="journey-track">
-        <div class="journey-seg base" style="width:17.4%;"></div>
-        <div class="journey-seg build" style="width:17.4%;"></div>
-        <div class="journey-seg endurance" style="width:34.8%;"></div>
-        <div class="journey-seg specific" style="width:17.4%;"></div>
-        <div class="journey-seg peak" style="width:13%;"></div>
-        <div class="journey-marker" id="jr-marker"></div>
-      </div>
-      <div class="journey-labels">
-        <span>Base</span><span>Build</span><span>Endurance</span><span>Specific</span><span>Peak</span>
-      </div>
-      <div class="journey-stats">
-        <div class="jstat"><div class="js-num" id="jr-weeksleft">22</div><div class="js-lab">สัปดาห์เหลือ</div></div>
-        <div class="jstat"><div class="js-num" id="jr-progress">0%</div><div class="js-lab">โปรแกรมรวม</div></div>
-        <div class="jstat"><div class="js-num" id="jr-longrun">10K</div><div class="js-lab">Long Run สัปดาห์นี้</div></div>
-      </div>
-    </div>
-
-    <button class="overview-btn" id="btn-overview">
-      <span>ดูภาพรวมทั้งโปรแกรม (23 สัปดาห์)</span>
-      <span class="ob-arrow">›</span>
-    </button>
-
-    <div class="tips-card">
-      <div class="tc-title">Coach reminders</div>
-      <ul class="tips-list">
-        <li>Long Run สำคัญที่สุด — ถ้าต้องเลือก เก็บ Long Run ไว้ก่อน</li>
-        <li>Easy means easy — วันวิ่งเบาให้คุยได้สบายๆ ไม่ฝืนเร่ง</li>
-        <li>อย่าเล่นขาถึง failure — เก็บแรงไว้ให้ Long Run ปลายสัปดาห์</li>
-        <li>ถ้าล้า ให้ตัด Wednesday Recovery ก่อนอันดับแรก</li>
-      </ul>
-    </div>
-
-    <p class="version-tag">Workout Journal v1</p>
-  </div>
-
-</div>
-
-<input type="file" id="photo-input" accept="image/*" style="display:none;">
-<input type="file" id="profile-photo-input" accept="image/*" style="display:none;">
-<div class="toast" id="toast"></div>
-
-<div class="overlay" id="overlay"></div>
-<div class="sheet" id="sheet">
-  <div class="sheet-handle"></div>
-  <div class="sheet-head">
-    <div>
-      <p class="sheet-title" id="sheet-title">-</p>
-      <p class="sheet-sub" id="sheet-sub">-</p>
-    </div>
-    <button class="sheet-close" id="sheet-close"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
-  </div>
-  <ul class="ex-list" id="sheet-list"></ul>
-  <div class="sheet-profile-form" id="sheet-profile-form" style="display:none;">
-    <div class="profile-avatar-row">
-      <span class="avatar avatar-lg" id="profile-avatar-preview"><span id="profile-avatar-letter">A</span></span>
-      <div class="avatar-actions">
-        <button class="avatar-btn" id="profile-photo-btn">เปลี่ยนรูปโปรไฟล์</button>
-        <button class="avatar-btn ghost" id="profile-photo-remove" style="display:none;">ลบรูป</button>
-      </div>
-    </div>
-    <div class="form-group">
-      <label class="form-label" for="profile-name-input">ชื่อ</label>
-      <input class="form-input" id="profile-name-input" type="text" maxlength="24" placeholder="เช่น Aum">
-    </div>
-    <div class="form-group">
-      <label class="form-label" for="profile-plan-input">ชื่อแผนการซ้อม</label>
-      <input class="form-input" id="profile-plan-input" type="text" maxlength="40" placeholder="เช่น Fuji Marathon • Hybrid Athlete">
-    </div>
-    <div class="form-group">
-      <label class="form-label" for="profile-bio-input">Bio / คำคมประจำตัว</label>
-      <textarea class="form-textarea" id="profile-bio-input" maxlength="120" placeholder="เช่น Strong, not skinny."></textarea>
-    </div>
-    <p class="form-hint">บันทึกอัตโนมัติทันทีที่พิมพ์</p>
-  </div>
-  <div class="sheet-foot-note" id="sheet-note" style="display:none;"></div>
-  <button class="sheet-back" id="sheet-back">เรียบร้อย</button>
-</div>
-
-<div class="bottomnav">
-  <button class="nav-btn active" id="nav-home" data-tab="home">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h12v-9"/></svg>
-    <span>Home</span>
-  </button>
-  <button class="nav-plus" id="nav-plus" aria-label="Add daily photo">
-    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg>
-  </button>
-  <button class="nav-btn" id="nav-stats" data-tab="stats">
-    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20v-7"/></svg>
-    <span>Stats</span>
-  </button>
-</div>
-
-<script>
-(function(){
+document.documentElement.setAttribute("data-theme", t);
+}catch(e){}
+})();</script><style>:root{--cream:#FBF4EA;--paper:#FFFEFB;--paper-soft:#FFF8EE;--ink:#2E2A24;--ink-soft:#6E6557;--muted:#A39B8C;--line:#EFE6D6;--green:#AFCFA0;--green-ink:#4D7A48;--green-bg:#EAF3E3;--yellow:#F2CE82;--yellow-ink:#92711F;--yellow-bg:#FBF1DC;--pink:#F2A9BC;--pink-ink:#C04568;--pink-bg:#FCEAEF;--blue:#A7C8E6;--blue-ink:#3D6E96;--blue-bg:#E9F1FA;--pink-strong:#EF5C84;--black:#221F1A;--radius-lg:28px;--radius-md:20px;--radius-sm:14px;--radius-pill:999px;--shadow:0 14px 32px rgba(46,35,18,0.10);--shadow-sm:0 6px 16px rgba(46,35,18,0.07);--shadow-press:0 2px 8px rgba(46,35,18,0.10);}[data-theme="dark"]{--cream:#1B1814;--paper:#252019;--paper-soft:#2C261E;--ink:#F2ECE0;--ink-soft:#C9C0AF;--muted:#8B8275;--line:#3A332B;--green-bg:rgba(175,207,160,0.16);--green-ink:#BFE0AE;--yellow-bg:rgba(242,206,130,0.16);--yellow-ink:#F2CE82;--pink-bg:rgba(242,169,188,0.16);--pink-ink:#F2A9BC;--blue-bg:rgba(167,200,230,0.16);--blue-ink:#A7C8E6;--black:#332D24;--shadow:0 14px 32px rgba(0,0,0,0.45);--shadow-sm:0 6px 16px rgba(0,0,0,0.35);--shadow-press:0 2px 8px rgba(0,0,0,0.3);}[data-theme="dark"] .hero,[data-theme="dark"] .task-card,[data-theme="dark"] .score-card,[data-theme="dark"] .journey,[data-theme="dark"] .sheet,[data-theme="dark"] .moment-empty,[data-theme="dark"] .moment-photo-wrap{border:1px solid var(--line);}body,.hero,.task-card,.score-card,.journey,.sheet,.bottomnav,.day-chip,.tick-btn,.badge{transition:background-color 0.25s ease,color 0.25s ease,border-color 0.25s ease;}*{box-sizing:border-box}html,body{margin:0;padding:0}body{background:var(--cream);color:var(--ink);font-family:ui-rounded,"SF Pro Rounded",-apple-system,"Segoe UI",system-ui,Roboto,"Helvetica Neue","Noto Sans Thai",sans-serif;-webkit-font-smoothing:antialiased;min-height:100vh;}button{font-family:inherit}.app{max-width:480px;margin:0 auto;padding:20px 16px 120px;position:relative;}.header{display:flex;align-items:center;gap:10px;padding:2px 2px 10px}.header-tap{flex:1;min-width:0;display:flex;align-items:center;gap:12px;border:none;background:none;padding:0;text-align:left;cursor:pointer;}.header-tap:active{opacity:0.7}.avatar{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--pink) 0%,var(--yellow) 50%,var(--blue) 100%);display:flex;align-items:center;justify-content:center;font-weight:800;font-size:18px;color:#fff;letter-spacing:0.5px;box-shadow:var(--shadow-sm);flex-shrink:0;background-size:cover;background-position:center;}.avatar.has-photo{background-image:none;background-color:var(--paper-soft)}.avatar.has-photo span{display:none}.avatar-lg{width:60px;height:60px;font-size:22px}.profile-avatar-row{display:flex;align-items:center;gap:14px;margin-bottom:18px}.avatar-actions{display:flex;flex-direction:column;gap:8px}.avatar-btn{border:none;background:var(--cream);color:var(--ink);font-size:12px;font-weight:700;padding:9px 14px;border-radius:var(--radius-pill);text-align:center;}.avatar-btn.ghost{background:none;color:var(--pink-ink)}.avatar-btn:active{opacity:0.7}.header-text{flex:1;min-width:0}.greeting{font-size:18px;font-weight:800;margin:0;line-height:1.25;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.subgreeting{font-size:12px;color:var(--ink-soft);margin:2px 0 0;font-weight:600;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.header-actions{display:flex;align-items:center;gap:8px;flex-shrink:0}.icon-btn{width:36px;height:36px;border-radius:50%;border:none;background:var(--paper-soft);color:var(--ink);display:flex;align-items:center;justify-content:center;flex-shrink:0;}.icon-btn svg{width:17px;height:17px}.icon-btn:active{transform:scale(0.92)}.icon-btn .icon-sun{display:none}.icon-btn .icon-moon{display:block}[data-theme="dark"] .icon-btn .icon-sun{display:block}[data-theme="dark"] .icon-btn .icon-moon{display:none}.today-btn{border:none;background:var(--paper-soft);color:var(--ink);font-size:12.5px;font-weight:700;padding:9px 14px;border-radius:var(--radius-pill);flex-shrink:0;}.today-btn:active{transform:scale(0.95)}.bio-row{display:block;width:100%;text-align:left;border:none;background:none;padding:0 2px 16px;margin-top:0;}.bio-text{font-size:12.5px;font-style:italic;color:var(--ink-soft);font-weight:600;line-height:1.5}.bio-text.placeholder{color:var(--muted)}.tab-panel{display:none}.tab-panel.active{display:block}.hero{background:var(--paper);border-radius:var(--radius-lg);padding:18px 16px 16px;box-shadow:var(--shadow);margin-bottom:16px;}.week-nav{display:flex;align-items:center;justify-content:space-between;gap:8px}.wn-btn{width:34px;height:34px;border-radius:50%;border:none;background:var(--paper-soft);font-size:16px;font-weight:800;color:var(--ink);display:flex;align-items:center;justify-content:center;}.wn-btn:disabled{opacity:0.3}.wn-btn:active:not(:disabled){transform:scale(0.92)}.week-pill{flex:1;text-align:center;font-size:13px;font-weight:800;background:var(--cream);border-radius:var(--radius-pill);padding:8px 10px;display:flex;flex-direction:column;gap:1px;}.week-pill small{font-weight:700;color:var(--ink-soft);font-size:10.5px;letter-spacing:0.3px}.date-range{text-align:center;font-size:11.5px;color:var(--muted);margin-top:9px;font-weight:600;}.day-selector{display:flex;gap:7px;overflow-x:auto;scrollbar-width:none;padding:14px 2px 4px;}.day-selector::-webkit-scrollbar{display:none}.day-chip{flex:0 0 auto;width:76px;display:flex;flex-direction:column;border-radius:16px;background:var(--cream);border:2px solid transparent;position:relative;user-select:none;-webkit-user-select:none;overflow:visible;}.day-chip.active{background:var(--black)}.day-chip.active .dc-head-label,.day-chip.active .dc-head-num{color:rgba(255,255,255,0.7)}.day-chip.active .dc-head-num{color:#fff}.day-chip.is-today:not(.active) .dc-head-num::after{content:"";display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--pink-strong);margin-left:3px;vertical-align:middle;}.dc-head{display:flex;align-items:center;justify-content:space-between;padding:8px 8px 5px;}.dc-head-label{font-size:10px;font-weight:800;color:var(--ink-soft)}.dc-head-num{font-size:13px;font-weight:800;color:var(--ink)}.dc-rows{display:flex;flex-direction:column;gap:4px;padding:0 6px 8px}.dc-row{display:flex;align-items:center;gap:5px;border-radius:9px;padding:5px 7px;font-size:10px;font-weight:800;touch-action:none;cursor:grab;position:relative;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}.dc-row.weight-row{background:var(--green-bg);color:var(--green-ink)}.dc-row.run-row{background:var(--blue-bg);color:var(--blue-ink)}.day-chip.active .dc-row.weight-row{background:rgba(175,207,160,0.18);color:#BFE0AE}.day-chip.active .dc-row.run-row{background:rgba(167,200,230,0.18);color:#A7C8E6}.dc-row-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}.dc-row.weight-row .dc-row-dot{background:var(--green-ink)}.dc-row.run-row .dc-row-dot{background:var(--blue-ink)}.dc-row.dragging-pill{z-index:9;box-shadow:var(--shadow);opacity:0.9;cursor:grabbing;border:1.5px solid var(--ink);}.dc-row.drop-target-row{box-shadow:0 0 0 2px var(--pink-strong) inset;opacity:1}.dc-done-dots{display:flex;justify-content:center;gap:3px;padding:0 0 7px}.dc-done-dot{width:5px;height:5px;border-radius:50%;background:var(--line)}.dc-done-dot.on{background:var(--pink-strong)}.day-chip.active .dc-done-dot{background:rgba(255,255,255,0.3)}.day-chip.active .dc-done-dot.on{background:#fff}.reset-order{display:block;margin:6px auto 0;border:none;background:none;font-size:11px;font-weight:700;color:var(--muted);text-decoration:underline;}.drag-hint{text-align:center;font-size:10.5px;color:var(--muted);font-weight:600;margin-top:2px;}.daily-header{display:flex;align-items:center;justify-content:space-between;padding:2px 4px 12px;}.daily-header .dh-day{font-size:18px;font-weight:800}.daily-header .dh-date{font-size:12px;color:var(--ink-soft);font-weight:700;margin-top:1px}.badge{font-size:10.5px;font-weight:800;padding:6px 12px;border-radius:var(--radius-pill);background:var(--black);color:#fff;}.task-card{background:var(--paper);border-radius:var(--radius-md);padding:16px 16px 14px;box-shadow:var(--shadow-sm);margin-bottom:14px;}.task-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px}.task-info{flex:1;min-width:0}.task-label{font-size:10.5px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;color:var(--muted);}.task-title{font-size:17px;font-weight:800;margin:3px 0 3px}.task-desc{font-size:13px;color:var(--ink-soft);font-weight:600;line-height:1.5;margin:0}.tick-btn{width:34px;height:34px;border-radius:50%;border:2px solid var(--line);background:var(--paper);flex-shrink:0;display:flex;align-items:center;justify-content:center;margin-top:2px;}.tick-btn svg{width:16px;height:16px;opacity:0}.tick-btn.on{background:var(--pink-strong);border-color:var(--pink-strong)}.tick-btn.on svg{opacity:1}.tick-btn:active{transform:scale(0.9)}.note-text{font-size:12px;color:var(--pink-ink);font-weight:700;margin-top:10px;line-height:1.5}.card-link{border:none;background:none;padding:11px 0 0;margin-top:2px;font-size:12.5px;font-weight:800;color:var(--ink-soft);display:flex;align-items:center;gap:4px;}.card-link:active{opacity:0.6}.fuel-line{font-size:12.5px;color:var(--ink-soft);font-weight:600;line-height:1.6;padding:2px 4px 0}.fuel-line b{color:var(--ink);font-weight:800}.moment-card{margin-bottom:14px}.moment-empty{border:2px dashed var(--line);border-radius:var(--radius-md);padding:26px 16px;text-align:center;color:var(--muted);font-size:12.5px;font-weight:600;line-height:1.5;display:flex;flex-direction:column;align-items:center;gap:8px;}.moment-empty svg{opacity:0.55}.moment-photo-wrap{position:relative;border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-sm);background:var(--paper);}.moment-photo-wrap img{width:100%;display:block;max-height:300px;object-fit:cover}.moment-tag{position:absolute;left:10px;bottom:10px;font-size:10.5px;font-weight:800;color:#fff;background:rgba(20,16,10,0.5);padding:5px 10px;border-radius:var(--radius-pill);}.moment-remove{position:absolute;top:8px;right:8px;width:30px;height:30px;border-radius:50%;background:rgba(20,16,10,0.55);border:none;color:#fff;display:flex;align-items:center;justify-content:center;}.section-head{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:12px;padding:0 2px}.section-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.6px;color:var(--ink-soft)}.score-card{background:var(--paper);border-radius:var(--radius-lg);padding:20px 18px;box-shadow:var(--shadow);text-align:center;margin-bottom:16px;}.score-label{font-size:11.5px;font-weight:700;color:var(--ink-soft);text-transform:uppercase;letter-spacing:0.6px;}.score-row{display:flex;align-items:flex-end;justify-content:center;gap:6px;margin:10px 0 6px}.score-num{font-size:50px;font-weight:800;line-height:0.9;letter-spacing:-1px}.score-suffix{font-size:17px;font-weight:700;color:var(--muted);margin-bottom:6px}.streak-text{font-size:12.5px;font-weight:700;color:var(--pink-ink)}.journey{background:var(--paper);border-radius:var(--radius-md);padding:16px 16px 17px;box-shadow:var(--shadow-sm);margin-bottom:16px}.journey-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:10px}.journey-top .jt-label{font-size:13px;font-weight:800}.journey-top .jt-val{font-size:12px;font-weight:700;color:var(--ink-soft)}.journey-track{display:flex;height:14px;border-radius:8px;overflow:visible;gap:2px;position:relative}.journey-seg{height:100%;border-radius:4px}.journey-seg:first-child{border-radius:8px 4px 4px 8px}.journey-seg:last-child{border-radius:4px 8px 8px 4px}.journey-seg.base{background:var(--green)}.journey-seg.build{background:var(--yellow)}.journey-seg.endurance{background:var(--blue)}.journey-seg.specific{background:var(--pink)}.journey-seg.peak{background:var(--black)}.journey-marker{position:absolute;top:-5px;width:3px;height:24px;background:var(--ink);border-radius:2px;display:none;}.journey-labels{display:flex;justify-content:space-between;margin-top:8px}.journey-labels span{font-size:9.5px;font-weight:700;color:var(--muted)}.journey-stats{display:flex;gap:10px;margin-top:14px}.jstat{flex:1;background:var(--cream);border-radius:14px;padding:10px 8px;text-align:center}.jstat .js-num{font-size:18px;font-weight:800}.jstat .js-lab{font-size:10px;font-weight:700;color:var(--ink-soft);margin-top:1px}.tips-card{background:var(--black);border-radius:var(--radius-md);padding:18px 16px;color:#fff}.tips-card .tc-title{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:0.5px;opacity:0.6;margin-bottom:10px}.tips-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}.tips-list li{font-size:13px;font-weight:600;line-height:1.45;padding-left:14px;position:relative}.tips-list li::before{content:"";position:absolute;left:0;top:7px;width:5px;height:5px;border-radius:50%;background:var(--pink-strong)}.bottomnav{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);width:min(78%,300px);background:var(--black);border-radius:var(--radius-pill);display:flex;align-items:center;justify-content:space-around;padding:8px;box-shadow:0 14px 30px rgba(0,0,0,0.28);z-index:40;}.nav-btn{border:none;background:transparent;color:rgba(255,255,255,0.5);display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:700;padding:6px 18px;border-radius:18px;}.nav-btn svg{width:19px;height:19px}.nav-btn.active{color:#fff;background:rgba(255,255,255,0.12)}.nav-plus{width:48px;height:48px;border-radius:50%;border:none;flex-shrink:0;background:var(--pink-strong);color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 18px rgba(239,92,132,0.45);}.nav-plus svg{width:20px;height:20px}.nav-plus:active{transform:scale(0.92)}.toast{position:fixed;bottom:92px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--black);color:#fff;font-size:12.5px;font-weight:700;padding:10px 18px;border-radius:var(--radius-pill);opacity:0;pointer-events:none;transition:all 0.25s ease;z-index:70;white-space:nowrap;}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.overlay{position:fixed;inset:0;background:rgba(30,24,14,0.42);opacity:0;pointer-events:none;transition:opacity 0.25s ease;z-index:60;}.overlay.open{opacity:1;pointer-events:auto}.sheet{position:fixed;left:0;right:0;bottom:0;max-width:480px;margin:0 auto;background:var(--paper);border-radius:26px 26px 0 0;padding:10px 20px 28px;max-height:78vh;overflow-y:auto;transform:translateY(100%);transition:transform 0.3s cubic-bezier(.22,.9,.32,1);z-index:61;box-shadow:0 -10px 40px rgba(40,30,18,0.18);}.sheet.open{transform:translateY(0)}.sheet-handle{width:38px;height:5px;background:var(--line);border-radius:4px;margin:6px auto 14px}.sheet-head{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}.sheet-title{font-size:18px;font-weight:800;margin:0}.sheet-sub{font-size:12.5px;color:var(--ink-soft);font-weight:700;margin:3px 0 0}.sheet-close{border:none;background:var(--cream);width:32px;height:32px;border-radius:50%;color:var(--ink-soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;}.ex-list{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px}.ex-item{display:flex;align-items:center;gap:12px;background:var(--cream);border-radius:14px;padding:12px 13px;}.ex-num{width:24px;height:24px;border-radius:50%;background:var(--paper);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:800;color:var(--ink-soft);}.ex-text{font-size:13.5px;font-weight:700;line-height:1.4}.sheet-foot-note{margin-top:14px;font-size:12px;font-weight:700;color:var(--pink-ink);background:var(--pink-bg);border-radius:12px;padding:10px 12px;line-height:1.5;}.sheet-back{width:100%;margin-top:16px;border:none;padding:13px 0;border-radius:var(--radius-pill);background:var(--black);color:#fff;font-size:13.5px;font-weight:800;}.overview-btn{width:100%;display:flex;align-items:center;justify-content:space-between;background:var(--paper);border:none;border-radius:var(--radius-md);padding:15px 16px;font-size:13.5px;font-weight:800;color:var(--ink);box-shadow:var(--shadow-sm);margin-bottom:16px;}.overview-btn:active{transform:scale(0.98)}.ob-arrow{color:var(--muted);font-weight:800}.week-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--cream);border:2px solid transparent;border-radius:14px;padding:11px 13px;width:100%;text-align:left;}.week-row.current{border-color:var(--pink-strong)}.wr-left{display:flex;align-items:center;gap:12px;min-width:0}.wr-num{width:30px;height:30px;border-radius:50%;background:var(--paper);flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:11.5px;font-weight:800;color:var(--ink-soft);}.wr-info{min-width:0}.wr-phase{font-size:13px;font-weight:800}.wr-date{font-size:11px;color:var(--ink-soft);font-weight:600;margin-top:1px}.wr-long{font-size:12px;font-weight:800;color:var(--blue-ink);flex-shrink:0;text-align:right;white-space:nowrap}.form-group{margin-bottom:14px}.form-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:0.4px;color:var(--muted);margin-bottom:6px;display:block}.form-input,.form-textarea{width:100%;border:2px solid var(--line);background:var(--cream);color:var(--ink);border-radius:14px;padding:11px 13px;font-size:14px;font-weight:600;font-family:inherit;}.form-textarea{resize:vertical;min-height:64px;line-height:1.5}.form-input:focus,.form-textarea:focus{outline:none;border-color:var(--pink-strong)}.form-hint{font-size:11.5px;color:var(--muted);font-weight:600;margin-top:14px;line-height:1.5}.version-tag{text-align:center;font-size:10.5px;color:var(--muted);font-weight:700;letter-spacing:0.3px;opacity:0.6;margin:22px 0 0;}@media (prefers-reduced-motion:reduce){*{transition:none !important;animation:none !important}}</style></head><body><div class="app"><div class="header"><button class="header-tap" id="header-tap" aria-label="edit profile"><span class="avatar" id="avatar"><span id="avatar-letter">A</span></span><span class="header-text"><p class="greeting" id="greeting-text">Aum, ready to train?</p><p class="subgreeting" id="subgreeting-text">Fuji Marathon • Hybrid Athlete</p></span></button><div class="header-actions"><button class="icon-btn" id="theme-toggle" aria-label="toggle dark mode"><svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg><svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3a7 7 0 0 0 9.79 9.79z"/></svg></button><button class="today-btn" id="btn-today">วันนี้</button></div></div><button class="bio-row" id="bio-row"><span class="bio-text" id="bio-text">เพิ่มคำคมหรือ bio ของคุณ</span></button><!-- ============ HOME (merged with Week) ============ --><div class="tab-panel active" id="panel-home"><div class="hero"><div class="week-nav"><button class="wn-btn" id="wn-prev">‹</button><div class="week-pill"><span id="hero-week-label">Week 1 / 23</span><small id="hero-phase-label">Base</small></div><button class="wn-btn" id="wn-next">›</button></div><div class="date-range" id="hero-date-range">22 มิ.ย. – 28 มิ.ย.</div><div class="day-selector" id="day-selector"></div><div class="drag-hint">ลากแถว Workout หรือ Running เพื่อสลับแยกกันได้</div><button class="reset-order" id="reset-order" style="display:none;">รีเซ็ตลำดับสัปดาห์นี้</button></div><div class="daily-header"><div><div class="dh-day" id="dh-day">วันเสาร์</div><div class="dh-date" id="dh-date">27 มิ.ย. 2026</div></div><div class="badge" id="dh-badge" style="display:none;">Today</div></div><div class="task-card" id="card-weight"><div class="task-top"><div class="task-info"><span class="task-label">Workout</span><p class="task-title" id="w-title">Legs</p><p class="task-desc" id="w-desc">-</p></div><button class="tick-btn" id="tick-weight" aria-label="mark workout complete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><p class="note-text" id="w-note" style="display:none;"></p><button class="card-link" data-open="weight">ดูรายละเอียดโปรแกรม ›</button></div><div class="task-card" id="card-run"><div class="task-top"><div class="task-info"><span class="task-label">Running</span><p class="task-title" id="r-title">Long Run</p><p class="task-desc" id="r-desc">-</p></div><button class="tick-btn" id="tick-run" aria-label="mark run complete"><svg viewBox="0 0 24 24" fill="none"><path d="M5 12.5L9.5 17L19 7" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button></div><button class="card-link" data-open="run">ดูรายละเอียดโปรแกรม ›</button></div><div class="moment-card" id="moment-card"><div class="moment-empty" id="moment-empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" width="26" height="26"><path d="M4 8h3l1.5-2h7L17 8h3a1 1 0 0 1 1 1v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9a1 1 0 0 1 1-1z"/><circle cx="12" cy="13" r="3.2"/></svg><p>ยังไม่มีรูปของวันนี้ • แตะปุ่ม + ด้านล่างเพื่อเพิ่มโมเมนต์</p></div><div class="moment-photo-wrap" id="moment-photo-wrap" style="display:none;"><img id="moment-photo" src="" alt="Daily moment"><span class="moment-tag">โมเมนต์วันนี้</span><button class="moment-remove" id="moment-remove" aria-label="remove photo"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div></div><p class="fuel-line" id="f-desc"><b>Fuel —</b> -</p></div><!-- ============ STATS + TIPS ============ --><div class="tab-panel" id="panel-stats"><div class="section-head"><span class="section-title">Progress</span></div><div class="score-card"><span class="score-label">weekly completion</span><div class="score-row"><span class="score-num" id="hero-score">0</span><span class="score-suffix">/10</span></div><div class="streak-text" id="hero-streak"></div></div><div class="journey"><div class="journey-top"><span class="jt-label" id="jr-phase">Base Phase</span><span class="jt-val" id="jr-volume">25–32 กม./สัปดาห์</span></div><div class="journey-track"><div class="journey-seg base" style="width:17.4%;"></div><div class="journey-seg build" style="width:17.4%;"></div><div class="journey-seg endurance" style="width:34.8%;"></div><div class="journey-seg specific" style="width:17.4%;"></div><div class="journey-seg peak" style="width:13%;"></div><div class="journey-marker" id="jr-marker"></div></div><div class="journey-labels"><span>Base</span><span>Build</span><span>Endurance</span><span>Specific</span><span>Peak</span></div><div class="journey-stats"><div class="jstat"><div class="js-num" id="jr-weeksleft">22</div><div class="js-lab">สัปดาห์เหลือ</div></div><div class="jstat"><div class="js-num" id="jr-progress">0%</div><div class="js-lab">โปรแกรมรวม</div></div><div class="jstat"><div class="js-num" id="jr-longrun">10K</div><div class="js-lab">Long Run สัปดาห์นี้</div></div></div></div><button class="overview-btn" id="btn-overview"><span>ดูภาพรวมทั้งโปรแกรม (23 สัปดาห์)</span><span class="ob-arrow">›</span></button><div class="tips-card"><div class="tc-title">Coach reminders</div><ul class="tips-list"><li>Long Run สำคัญที่สุด — ถ้าต้องเลือก เก็บ Long Run ไว้ก่อน</li><li>Easy means easy — วันวิ่งเบาให้คุยได้สบายๆ ไม่ฝืนเร่ง</li><li>อย่าเล่นขาถึง failure — เก็บแรงไว้ให้ Long Run ปลายสัปดาห์</li><li>ถ้าล้า ให้ตัด Wednesday Recovery ก่อนอันดับแรก</li></ul></div><p class="version-tag">Workout Journal v1</p></div></div><input type="file" id="photo-input" accept="image/*" style="display:none;"><input type="file" id="profile-photo-input" accept="image/*" style="display:none;"><div class="toast" id="toast"></div><div class="overlay" id="overlay"></div><div class="sheet" id="sheet"><div class="sheet-handle"></div><div class="sheet-head"><div><p class="sheet-title" id="sheet-title">-</p><p class="sheet-sub" id="sheet-sub">-</p></div><button class="sheet-close" id="sheet-close"><svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button></div><ul class="ex-list" id="sheet-list"></ul><div class="sheet-profile-form" id="sheet-profile-form" style="display:none;"><div class="profile-avatar-row"><span class="avatar avatar-lg" id="profile-avatar-preview"><span id="profile-avatar-letter">A</span></span><div class="avatar-actions"><button class="avatar-btn" id="profile-photo-btn">เปลี่ยนรูปโปรไฟล์</button><button class="avatar-btn ghost" id="profile-photo-remove" style="display:none;">ลบรูป</button></div></div><div class="form-group"><label class="form-label" for="profile-name-input">ชื่อ</label><input class="form-input" id="profile-name-input" type="text" maxlength="24" placeholder="เช่น Aum"></div><div class="form-group"><label class="form-label" for="profile-plan-input">ชื่อแผนการซ้อม</label><input class="form-input" id="profile-plan-input" type="text" maxlength="40" placeholder="เช่น Fuji Marathon • Hybrid Athlete"></div><div class="form-group"><label class="form-label" for="profile-bio-input">Bio / คำคมประจำตัว</label><textarea class="form-textarea" id="profile-bio-input" maxlength="120" placeholder="เช่น Strong, not skinny."></textarea></div><p class="form-hint">บันทึกอัตโนมัติทันทีที่พิมพ์</p></div><div class="sheet-foot-note" id="sheet-note" style="display:none;"></div><button class="sheet-back" id="sheet-back">เรียบร้อย</button></div><div class="bottomnav"><button class="nav-btn active" id="nav-home" data-tab="home"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11.5L12 4l8 7.5"/><path d="M6 10v9h12v-9"/></svg><span>Home</span></button><button class="nav-plus" id="nav-plus" aria-label="Add daily photo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round"><path d="M12 5v14M5 12h14"/></svg></button><button class="nav-btn" id="nav-stats" data-tab="stats"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M5 20V11"/><path d="M12 20V4"/><path d="M19 20v-7"/></svg><span>Stats</span></button></div><script>(function(){
 "use strict";
-
-/* ================= DATA ================= */
-
-var PROGRAM_START = new Date(2026,5,22); // 22 June 2026, Monday
+var PROGRAM_START = new Date(2026,5,22);
 PROGRAM_START.setHours(0,0,0,0);
 var TOTAL_WEEKS = 23;
-
 var DAY_NAMES_TH = ["วันจันทร์","วันอังคาร","วันพุธ","วันพฤหัสบดี","วันศุกร์","วันเสาร์","วันอาทิตย์"];
 var DAY_SHORT_TH = ["จ","อ","พ","พฤ","ศ","ส","อา"];
 var THAI_MONTHS = ["ม.ค.","ก.พ.","มี.ค.","เม.ย.","พ.ค.","มิ.ย.","ก.ค.","ส.ค.","ก.ย.","ต.ค.","พ.ย.","ธ.ค."];
-
 var WEIGHT_DAYS = ["chest","back","shoulder","legs",null,null,null];
-
 var WEIGHT_PROGRAMS = {
-  chest:{ label:"Chest", title:"Chest", exercises:[
-      "Barbell Incline Bench Press 4x5–8",
-      "Cable Fly Mid 3x10–12",
-      "Cable Fly Low 3x12–15",
-      "Dumbbell Bicep Curl 3x10–12",
-      "Machine Ab Crunch 3x15"
-  ]},
-  back:{ label:"Back", title:"Back", exercises:[
-      "Machine Lat Pulldown Wide-Grip 4x8–12",
-      "Machine Hammer-Grip Row 3x8–12",
-      "Cable V-Handle Seated Row 3x10–12",
-      "Pull-Up 3x6–10",
-      "Cable Face Pull 3x15–20"
-  ]},
-  shoulder:{ label:"Shoulder + Arms", title:"Shoulder + Arms", exercises:[
-      "Dumbbell Shoulder Press 4x6–8",
-      "Dumbbell Lateral Raise 3x12–15",
-      "Barbell Bicep Curl 3x8–12",
-      "Dumbbell Chest-Supported Row 3x10–12",
-      "Dumbbell Hammer Curl 3x12"
-  ]},
-  legs:{ label:"Legs", title:"Legs", exercises:[
-      "Barbell Back Squat 4x5–8",
-      "Barbell Deadlift 3x6–8",
-      "Dumbbell Bulgarian Split Squat 3x8–10/ข้าง",
-      "Machine Ab Crunch 3x15",
-      "Core / Plank 5 นาที"
-  ]}
+chest:{ label:"Chest", title:"Chest", exercises:[ "Barbell Incline Bench Press 4x5–8",
+"Cable Fly Mid 3x10–12",
+"Cable Fly Low 3x12–15",
+"Dumbbell Bicep Curl 3x10–12",
+"Machine Ab Crunch 3x15" ]},
+back:{ label:"Back", title:"Back", exercises:[ "Machine Lat Pulldown Wide-Grip 4x8–12",
+"Machine Hammer-Grip Row 3x8–12",
+"Cable V-Handle Seated Row 3x10–12",
+"Pull-Up 3x6–10",
+"Cable Face Pull 3x15–20" ]},
+shoulder:{ label:"Shoulder + Arms", title:"Shoulder + Arms", exercises:[ "Dumbbell Shoulder Press 4x6–8",
+"Dumbbell Lateral Raise 3x12–15",
+"Barbell Bicep Curl 3x8–12",
+"Dumbbell Chest-Supported Row 3x10–12",
+"Dumbbell Hammer Curl 3x12" ]},
+legs:{ label:"Legs", title:"Legs", exercises:[ "Barbell Back Squat 4x5–8",
+"Barbell Deadlift 3x6–8",
+"Dumbbell Bulgarian Split Squat 3x8–10/ข้าง",
+"Machine Ab Crunch 3x15",
+"Core / Plank 5 นาที" ]}
 };
-
 var LONG_RUN_KM = [10,12,14,10, 16,18,20,14, 21,22,24,16, 24,26,28,20, 28,30,32,24, 30,34,28];
-
 var QUALITY_PROGRAMS = {
-  A:{ name:"Marathon Pace Builder", total:"50–60 นาที", steps:[
-      "Warm-up 10 นาที @ 7.0–8.0 กม./ชม.",
-      "Easy 5 นาที @ 8.0 กม./ชม.",
-      "Marathon Pace Block 1: 10 นาที @ 9.2–9.6 กม./ชม.",
-      "Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
-      "Marathon Pace Block 2: 10 นาที @ 9.2–9.8 กม./ชม.",
-      "Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
-      "Marathon Pace Block 3: 8–12 นาที @ 9.2–10.0 กม./ชม.",
-      "Cool down 5–10 นาที @ 6.5–7.5 กม./ชม."
-  ]},
-  B:{ name:"Tempo Run", total:"45–55 นาที", steps:[
-      "Warm-up 10–12 นาที @ 7.0–8.0 กม./ชม.",
-      "Tempo Block 1: 8 นาที @ 10.1–10.5 กม./ชม.",
-      "Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
-      "Tempo Block 2: 8 นาที @ 10.1–10.5 กม./ชม.",
-      "Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
-      "Tempo Block 3: 6–8 นาที @ 10.1–10.8 กม./ชม.",
-      "Cool down 8–10 นาที @ 6.5–7.5 กม./ชม."
-  ]},
-  C:{ name:"VO2 Max Interval", total:"40–50 นาที", steps:[
-      "Warm-up 10–12 นาที @ 7.0–8.0 กม./ชม.",
-      "Fast Run 1 นาที @ 11.0–12.0 กม./ชม.",
-      "Easy Jog 2 นาที @ 7.3–7.8 กม./ชม.",
-      "ทำซ้ำ 6–8 รอบ",
-      "Cool down 8–10 นาที @ 6.5–7.5 กม./ชม."
-  ]},
-  D:{ name:"Deload / Marathon Pace เบาๆ", total:"35–45 นาที", steps:[
-      "Warm-up 10 นาที @ 7.0–7.5 กม./ชม.",
-      "Marathon Pace เบาๆ 15–20 นาที @ 9.0–9.4 กม./ชม.",
-      "Cool down 10 นาที @ 6.5–7.5 กม./ชม.",
-      "สัปดาห์นี้คือ deload — ไม่ต้องฝืน"
-  ]}
+A:{ name:"Marathon Pace Builder", total:"50–60 นาที", steps:[ "Warm-up 10 นาที @ 7.0–8.0 กม./ชม.",
+"Easy 5 นาที @ 8.0 กม./ชม.",
+"Marathon Pace Block 1: 10 นาที @ 9.2–9.6 กม./ชม.",
+"Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
+"Marathon Pace Block 2: 10 นาที @ 9.2–9.8 กม./ชม.",
+"Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
+"Marathon Pace Block 3: 8–12 นาที @ 9.2–10.0 กม./ชม.",
+"Cool down 5–10 นาที @ 6.5–7.5 กม./ชม." ]},
+B:{ name:"Tempo Run", total:"45–55 นาที", steps:[ "Warm-up 10–12 นาที @ 7.0–8.0 กม./ชม.",
+"Tempo Block 1: 8 นาที @ 10.1–10.5 กม./ชม.",
+"Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
+"Tempo Block 2: 8 นาที @ 10.1–10.5 กม./ชม.",
+"Easy Jog 3 นาที @ 7.5–8.0 กม./ชม.",
+"Tempo Block 3: 6–8 นาที @ 10.1–10.8 กม./ชม.",
+"Cool down 8–10 นาที @ 6.5–7.5 กม./ชม." ]},
+C:{ name:"VO2 Max Interval", total:"40–50 นาที", steps:[ "Warm-up 10–12 นาที @ 7.0–8.0 กม./ชม.",
+"Fast Run 1 นาที @ 11.0–12.0 กม./ชม.",
+"Easy Jog 2 นาที @ 7.3–7.8 กม./ชม.",
+"ทำซ้ำ 6–8 รอบ",
+"Cool down 8–10 นาที @ 6.5–7.5 กม./ชม." ]},
+D:{ name:"Deload / Marathon Pace เบาๆ", total:"35–45 นาที", steps:[ "Warm-up 10 นาที @ 7.0–7.5 กม./ชม.",
+"Marathon Pace เบาๆ 15–20 นาที @ 9.0–9.4 กม./ชม.",
+"Cool down 10 นาที @ 6.5–7.5 กม./ชม.",
+"สัปดาห์นี้คือ deload — ไม่ต้องฝืน" ]}
 };
 var QUALITY_ORDER = ["A","B","C","D"];
-
 function fmtDate(d){ return d.getDate()+" "+THAI_MONTHS[d.getMonth()]; }
 function fmtDateFull(d){ return d.getDate()+" "+THAI_MONTHS[d.getMonth()]+" "+d.getFullYear(); }
 function dateForDay(weekIdx,dayIdx){
-  var d = new Date(PROGRAM_START.getTime());
-  d.setDate(d.getDate() + weekIdx*7 + dayIdx);
-  return d;
+var d = new Date(PROGRAM_START.getTime());
+d.setDate(d.getDate() + weekIdx*7 + dayIdx);
+return d;
 }
 function phaseForWeek(weekIdx){
-  var n = weekIdx+1;
-  if(n<=4) return "Base";
-  if(n<=8) return "Build";
-  if(n<=16) return "Endurance";
-  if(n<=20) return "Specific";
-  return "Peak";
+var n = weekIdx+1;
+if(n<=4) return "Base";
+if(n<=8) return "Build";
+if(n<=16) return "Endurance";
+if(n<=20) return "Specific";
+return "Peak";
 }
 function volumeForWeek(weekIdx){
-  var n = weekIdx+1;
-  if(n<=4) return "25–32 กม./สัปดาห์";
-  if(n<=8) return "32–40 กม./สัปดาห์";
-  if(n<=12) return "38–48 กม./สัปดาห์";
-  if(n<=16) return "45–55 กม./สัปดาห์";
-  if(n<=20) return "50–60 กม./สัปดาห์";
-  return "55–65 กม./สัปดาห์";
+var n = weekIdx+1;
+if(n<=4) return "25–32 กม./สัปดาห์";
+if(n<=8) return "32–40 กม./สัปดาห์";
+if(n<=12) return "38–48 กม./สัปดาห์";
+if(n<=16) return "45–55 กม./สัปดาห์";
+if(n<=20) return "50–60 กม./สัปดาห์";
+return "55–65 กม./สัปดาห์";
 }
-
-/* ---- content by SLOT (original Mon..Sun template). Slot may be reassigned to a different calendar day via drag-swap. ---- */
-
 function getWeightBySlot(weekIdx, slot){
-  var key = WEIGHT_DAYS[slot];
-  if(!key) return null;
-  var prog = WEIGHT_PROGRAMS[key];
-  var note = null;
-  if(key==="legs"){
-    note = "อย่าเล่นขาถึง failure";
-    if(weekIdx>=16) note += " • หลัง Week 16 ลด volume ขาลง 20–30%";
-  }
-  return { key:key, label:prog.label, title:prog.title, exercises:prog.exercises, note:note };
+var key = WEIGHT_DAYS[slot];
+if(!key) return null;
+var prog = WEIGHT_PROGRAMS[key];
+var note = null;
+if(key==="legs"){
+note = "อย่าเล่นขาถึง failure";
+if(weekIdx>=16) note += " • หลัง Week 16 ลด volume ขาลง 20–30%";
 }
-
+return { key:key, label:prog.label, title:prog.title, exercises:prog.exercises, note:note };
+}
 function getRunBySlot(weekIdx, slot){
-  var km, extra;
-  switch(slot){
-    case 0:
-      return { type:"easy", title:"Easy Run", desc:"6–8K @ 7:15–8:15/กม.",
-        meta:[["Pace","7:15–8:15/กม."],["Speed","7.3–8.3 กม./ชม."]],
-        goal:"เพิ่ม aerobic base แบบไม่ล้าขา",
-        steps:["วิ่งเบาๆ ต่อเนื่อง 6–8K","คุมจังหวะหายใจให้คุยได้สบาย ไม่เร่ง pace"] };
-    case 1:
-      var qKey = QUALITY_ORDER[weekIdx % 4];
-      var q = QUALITY_PROGRAMS[qKey];
-      return { type:"quality", title:"Quality Run • "+q.name, desc:q.total,
-        meta:[["รูปแบบ",q.name],["รวมเวลา",q.total]],
-        goal:"เพิ่ม VO2 Max ความเร็ว และความทน pace",
-        steps:q.steps };
-    case 2:
-      return { type:"recovery", title:"Recovery Run", desc:"5–7K @ 7:45–8:45/กม.",
-        meta:[["Pace","7:45–8:45/กม."],["Speed","6.8–7.7 กม./ชม."]],
-        goal:"เก็บระยะเบาๆ ไม่ให้ recovery พัง",
-        steps:["วิ่งช้าๆ สบายๆ 5–7K","ถ้าเพลียมาก ลดเหลือ 5K หรือสลับเป็นเดินเร็ว"] };
-    case 3:
-      return { type:"mobility", title:"Mobility / เดินเบาๆ", desc:"ไม่บังคับวิ่งวันนี้",
-        meta:[["ประเภท","Rest / Walk"]],
-        goal:"เล่นขาเพื่อสร้างกล้าม แต่ไม่กระทบ Long Run",
-        steps:["เดินเบา 20–30 นาที (ถ้าอยาก)","Mobility / Stretching ขาเบาๆ","ไม่บังคับวิ่ง วันนี้พักจริงจัง"] };
-    case 4:
-      return { type:"choice", title:"Marathon Pace Run", desc:"5–8K @ 6:00–6:30/กม.",
-        meta:[["Pace","6:00–6:30/กม."],["Speed","9.2–10.0 กม./ชม."]],
-        goal:"ซ้อม pace แข่งจริงแบบคุมได้",
-        steps:[
-          "ถ้าร่างกายสด: Warm-up 2K → Marathon Pace 5–8K @ 6:00–6:30/กม. → Cool down 1–2K",
-          "ถ้าขาล้าจาก Leg Day: Easy Run 5–8K @ 7:15–8:15/กม.",
-          "ถ้าเหนื่อยมาก: Rest / Walk / Mobility"
-        ] };
-    case 5:
-      km = LONG_RUN_KM[weekIdx];
-      extra = "";
-      if(weekIdx===20) extra = " (5K ท้ายใกล้ Marathon Pace)";
-      else if(weekIdx===21) extra = " (Peak Long Run)";
-      else if(weekIdx===22) extra = " (Controlled Long Run)";
-      return { type:"long", title:"Long Run"+extra, desc:km+"K @ 6:50–7:50/กม.",
-        meta:[["ระยะ",km+"K"],["Pace","6:50–7:50/กม."]],
-        goal:"สร้าง endurance สำหรับ Marathon",
-        steps:[
-          "วิ่งยาว "+km+"K ที่ pace 6:50–7:50/กม.",
-          "บางช่วงท้ายค่อยใส่ Marathon Pace ได้",
-          "Goal ไม่ใช่วิ่งเร็ว แต่คืออยู่บนขาได้นานและไม่พัง"
-        ] };
-    case 6:
-      return { type:"rest", title:"Rest Day", desc:"พักเต็มที่ ฟื้นตัว",
-        meta:[["ประเภท","Rest"]],
-        goal:"ฟื้นตัวให้พร้อมเริ่มสัปดาห์ใหม่",
-        steps:["พักเต็มที่ ไม่ต้องวิ่ง","Mobility / Stretching เบาๆ (ถ้าอยาก)"] };
-  }
+var km, extra;
+switch(slot){
+case 0: return { type:"easy", title:"Easy Run", desc:"6–8K @ 7:15–8:15/กม.",
+meta:[["Pace","7:15–8:15/กม."],["Speed","7.3–8.3 กม./ชม."]],
+goal:"เพิ่ม aerobic base แบบไม่ล้าขา",
+steps:["วิ่งเบาๆ ต่อเนื่อง 6–8K","คุมจังหวะหายใจให้คุยได้สบาย ไม่เร่ง pace"] };
+case 1: var qKey = QUALITY_ORDER[weekIdx % 4];
+var q = QUALITY_PROGRAMS[qKey];
+return { type:"quality", title:"Quality Run • "+q.name, desc:q.total,
+meta:[["รูปแบบ",q.name],["รวมเวลา",q.total]],
+goal:"เพิ่ม VO2 Max ความเร็ว และความทน pace",
+steps:q.steps };
+case 2: return { type:"recovery", title:"Recovery Run", desc:"5–7K @ 7:45–8:45/กม.",
+meta:[["Pace","7:45–8:45/กม."],["Speed","6.8–7.7 กม./ชม."]],
+goal:"เก็บระยะเบาๆ ไม่ให้ recovery พัง",
+steps:["วิ่งช้าๆ สบายๆ 5–7K","ถ้าเพลียมาก ลดเหลือ 5K หรือสลับเป็นเดินเร็ว"] };
+case 3: return { type:"mobility", title:"Mobility / เดินเบาๆ", desc:"ไม่บังคับวิ่งวันนี้",
+meta:[["ประเภท","Rest / Walk"]],
+goal:"เล่นขาเพื่อสร้างกล้าม แต่ไม่กระทบ Long Run",
+steps:["เดินเบา 20–30 นาที (ถ้าอยาก)","Mobility / Stretching ขาเบาๆ","ไม่บังคับวิ่ง วันนี้พักจริงจัง"] };
+case 4: return { type:"choice", title:"Marathon Pace Run", desc:"5–8K @ 6:00–6:30/กม.",
+meta:[["Pace","6:00–6:30/กม."],["Speed","9.2–10.0 กม./ชม."]],
+goal:"ซ้อม pace แข่งจริงแบบคุมได้",
+steps:[ "ถ้าร่างกายสด: Warm-up 2K → Marathon Pace 5–8K @ 6:00–6:30/กม. → Cool down 1–2K",
+"ถ้าขาล้าจาก Leg Day: Easy Run 5–8K @ 7:15–8:15/กม.",
+"ถ้าเหนื่อยมาก: Rest / Walk / Mobility" ] };
+case 5: km = LONG_RUN_KM[weekIdx];
+extra = "";
+if(weekIdx===20) extra = " (5K ท้ายใกล้ Marathon Pace)";
+else if(weekIdx===21) extra = " (Peak Long Run)";
+else if(weekIdx===22) extra = " (Controlled Long Run)";
+return { type:"long", title:"Long Run"+extra, desc:km+"K @ 6:50–7:50/กม.",
+meta:[["ระยะ",km+"K"],["Pace","6:50–7:50/กม."]],
+goal:"สร้าง endurance สำหรับ Marathon",
+steps:[ "วิ่งยาว "+km+"K ที่ pace 6:50–7:50/กม.",
+"บางช่วงท้ายค่อยใส่ Marathon Pace ได้",
+"Goal ไม่ใช่วิ่งเร็ว แต่คืออยู่บนขาได้นานและไม่พัง" ] };
+case 6: return { type:"rest", title:"Rest Day", desc:"พักเต็มที่ ฟื้นตัว",
+meta:[["ประเภท","Rest"]],
+goal:"ฟื้นตัวให้พร้อมเริ่มสัปดาห์ใหม่",
+steps:["พักเต็มที่ ไม่ต้องวิ่ง","Mobility / Stretching เบาๆ (ถ้าอยาก)"] };
 }
-
-/* ---- SEPARATE slot orders: weight and run can be swapped independently ---- */
-
+}
 function wOrderKey(weekIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_worder"; }
 function rOrderKey(weekIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_rorder"; }
-
 function getOrder(key){
-  try{
-    var raw = localStorage.getItem(key);
-    if(raw){ var arr = JSON.parse(raw); if(Array.isArray(arr) && arr.length===7) return arr; }
-  }catch(e){}
-  return [0,1,2,3,4,5,6];
+try{
+var raw = localStorage.getItem(key);
+if(raw){ var arr = JSON.parse(raw); if(Array.isArray(arr) && arr.length===7) return arr; }
+}catch(e){}
+return [0,1,2,3,4,5,6];
 }
 function setOrder(key, order){ try{ localStorage.setItem(key, JSON.stringify(order)); }catch(e){} }
 function removeOrder(key){ try{ localStorage.removeItem(key); }catch(e){} }
-
 function getWeightSlotOrder(weekIdx){ return getOrder(wOrderKey(weekIdx)); }
 function getRunSlotOrder(weekIdx){ return getOrder(rOrderKey(weekIdx)); }
-
 function swapWeightDays(weekIdx, dayA, dayB){
-  var o = getWeightSlotOrder(weekIdx);
-  var t = o[dayA]; o[dayA] = o[dayB]; o[dayB] = t;
-  setOrder(wOrderKey(weekIdx), o);
+var o = getWeightSlotOrder(weekIdx);
+var t = o[dayA]; o[dayA] = o[dayB]; o[dayB] = t;
+setOrder(wOrderKey(weekIdx), o);
 }
 function swapRunDays(weekIdx, dayA, dayB){
-  var o = getRunSlotOrder(weekIdx);
-  var t = o[dayA]; o[dayA] = o[dayB]; o[dayB] = t;
-  setOrder(rOrderKey(weekIdx), o);
+var o = getRunSlotOrder(weekIdx);
+var t = o[dayA]; o[dayA] = o[dayB]; o[dayB] = t;
+setOrder(rOrderKey(weekIdx), o);
 }
 function resetAllOrders(weekIdx){
-  removeOrder(wOrderKey(weekIdx));
-  removeOrder(rOrderKey(weekIdx));
+removeOrder(wOrderKey(weekIdx));
+removeOrder(rOrderKey(weekIdx));
 }
 function isWeekOrderDefault(weekIdx){
-  var wo = getWeightSlotOrder(weekIdx), ro = getRunSlotOrder(weekIdx);
-  for(var i=0;i<7;i++){ if(wo[i]!==i||ro[i]!==i) return false; }
-  return true;
+var wo = getWeightSlotOrder(weekIdx), ro = getRunSlotOrder(weekIdx);
+for(var i=0;i<7;i++){ if(wo[i]!==i||ro[i]!==i) return false; }
+return true;
 }
-
-/* ---- public accessors: route each type through its own slot order ---- */
-
 function getWeight(weekIdx, displayDay){
-  var slot = getWeightSlotOrder(weekIdx)[displayDay];
-  return getWeightBySlot(weekIdx, slot);
+var slot = getWeightSlotOrder(weekIdx)[displayDay];
+return getWeightBySlot(weekIdx, slot);
 }
 function getRun(weekIdx, displayDay){
-  var slot = getRunSlotOrder(weekIdx)[displayDay];
-  return getRunBySlot(weekIdx, slot);
+var slot = getRunSlotOrder(weekIdx)[displayDay];
+return getRunBySlot(weekIdx, slot);
 }
-
 function getFuel(weekIdx, displayDay){
-  var w = getWeight(weekIdx, displayDay);
-  var r = getRun(weekIdx, displayDay);
-  if(w) return "เน้นโปรตีน 1.6–2.0g/kg + คาร์บก่อน-หลังเล่นเวท เพื่อรักษากล้ามช่วงซ้อมหนัก";
-  if(r.type==="long") return "เติมคาร์บก่อนวิ่งยาว + พกเกลือแร่หรือเจลไว้ระหว่างทาง";
-  if(r.type==="quality") return "คาร์บเบาๆ ก่อนซ้อมหนัก + โปรตีนหลังซ้อมเพื่อฟื้นตัวไว";
-  return "โปรตีนสม่ำเสมอตลอดวัน + น้ำให้พอ ฟื้นตัวให้เต็มที่";
+var w = getWeight(weekIdx, displayDay);
+var r = getRun(weekIdx, displayDay);
+if(w) return "เน้นโปรตีน 1.6–2.0g/kg + คาร์บก่อน-หลังเล่นเวท เพื่อรักษากล้ามช่วงซ้อมหนัก";
+if(r.type==="long") return "เติมคาร์บก่อนวิ่งยาว + พกเกลือแร่หรือเจลไว้ระหว่างทาง";
+if(r.type==="quality") return "คาร์บเบาๆ ก่อนซ้อมหนัก + โปรตีนหลังซ้อมเพื่อฟื้นตัวไว";
+return "โปรตีนสม่ำเสมอตลอดวัน + น้ำให้พอ ฟื้นตัวให้เต็มที่";
 }
-
-/* ================= STORAGE: ticks + photo ================= */
-
 function weightKey(weekIdx, dayIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_d"+dayIdx+"_weight"; }
 function runKey(weekIdx, dayIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_d"+dayIdx+"_run"; }
 function photoKey(weekIdx, dayIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_d"+dayIdx+"_photo"; }
-
 function isWeightDone(weekIdx, dayIdx){
-  try{ return localStorage.getItem(weightKey(weekIdx,dayIdx)) === "1"; }catch(e){ return false; }
+try{ return localStorage.getItem(weightKey(weekIdx,dayIdx)) === "1"; }catch(e){ return false; }
 }
 function setWeightDone(weekIdx, dayIdx, val){
-  try{
-    if(val) localStorage.setItem(weightKey(weekIdx,dayIdx), "1");
-    else localStorage.removeItem(weightKey(weekIdx,dayIdx));
-  }catch(e){}
+try{
+if(val) localStorage.setItem(weightKey(weekIdx,dayIdx), "1");
+else localStorage.removeItem(weightKey(weekIdx,dayIdx));
+}catch(e){}
 }
 function isRunDone(weekIdx, dayIdx){
-  try{ return localStorage.getItem(runKey(weekIdx,dayIdx)) === "1"; }catch(e){ return false; }
+try{ return localStorage.getItem(runKey(weekIdx,dayIdx)) === "1"; }catch(e){ return false; }
 }
 function setRunDone(weekIdx, dayIdx, val){
-  try{
-    if(val) localStorage.setItem(runKey(weekIdx,dayIdx), "1");
-    else localStorage.removeItem(runKey(weekIdx,dayIdx));
-  }catch(e){}
+try{
+if(val) localStorage.setItem(runKey(weekIdx,dayIdx), "1");
+else localStorage.removeItem(runKey(weekIdx,dayIdx));
+}catch(e){}
 }
 function getPhoto(weekIdx, dayIdx){
-  try{ return localStorage.getItem(photoKey(weekIdx,dayIdx)); }catch(e){ return null; }
+try{ return localStorage.getItem(photoKey(weekIdx,dayIdx)); }catch(e){ return null; }
 }
 function setPhoto(weekIdx, dayIdx, dataUrl){
-  try{
-    if(dataUrl) localStorage.setItem(photoKey(weekIdx,dayIdx), dataUrl);
-    else localStorage.removeItem(photoKey(weekIdx,dayIdx));
-    return true;
-  }catch(e){ return false; }
+try{
+if(dataUrl) localStorage.setItem(photoKey(weekIdx,dayIdx), dataUrl);
+else localStorage.removeItem(photoKey(weekIdx,dayIdx));
+return true;
+}catch(e){ return false; }
 }
-
 function dayMaxPoints(weekIdx, dayIdx){ return (getWeight(weekIdx,dayIdx) ? 1 : 0) + 1; }
 function dayDonePoints(weekIdx, dayIdx){
-  var p = 0;
-  if(getWeight(weekIdx,dayIdx) && isWeightDone(weekIdx,dayIdx)) p++;
-  if(isRunDone(weekIdx,dayIdx)) p++;
-  return p;
+var p = 0;
+if(getWeight(weekIdx,dayIdx) && isWeightDone(weekIdx,dayIdx)) p++;
+if(isRunDone(weekIdx,dayIdx)) p++;
+return p;
 }
 function isDayFullyDone(weekIdx, dayIdx){
-  return dayDonePoints(weekIdx,dayIdx) === dayMaxPoints(weekIdx,dayIdx);
+return dayDonePoints(weekIdx,dayIdx) === dayMaxPoints(weekIdx,dayIdx);
 }
 function weekMaxPoints(weekIdx){
-  var m=0; for(var d=0; d<7; d++) m += dayMaxPoints(weekIdx,d);
-  return m;
+var m=0; for(var d=0; d<7; d++) m += dayMaxPoints(weekIdx,d);
+return m;
 }
 function weekDonePoints(weekIdx){
-  var s=0; for(var d=0; d<7; d++) s += dayDonePoints(weekIdx,d);
-  return s;
+var s=0; for(var d=0; d<7; d++) s += dayDonePoints(weekIdx,d);
+return s;
 }
 function weekScoreText(weekIdx){
-  var max = weekMaxPoints(weekIdx), done = weekDonePoints(weekIdx);
-  var score = max ? done/max*10 : 0;
-  return (Math.round(score*10)/10).toString();
+var max = weekMaxPoints(weekIdx), done = weekDonePoints(weekIdx);
+var score = max ? done/max*10 : 0;
+return (Math.round(score*10)/10).toString();
 }
 function totalDonePoints(){
-  var s=0; for(var w=0; w<TOTAL_WEEKS; w++) s += weekDonePoints(w);
-  return s;
+var s=0; for(var w=0; w<TOTAL_WEEKS; w++) s += weekDonePoints(w);
+return s;
 }
 function totalMaxPoints(){
-  var s=0; for(var w=0; w<TOTAL_WEEKS; w++) s += weekMaxPoints(w);
-  return s;
+var s=0; for(var w=0; w<TOTAL_WEEKS; w++) s += weekMaxPoints(w);
+return s;
 }
 function currentStreak(){
-  var idx = todayIndex();
-  if(idx < 0) idx = 0;
-  if(idx > TOTAL_WEEKS*7-1) idx = TOTAL_WEEKS*7-1;
-  var streak = 0;
-  for(var i=idx; i>=0; i--){
-    var w = Math.floor(i/7), d = i%7;
-    if(isDayFullyDone(w,d)) streak++;
-    else break;
-  }
-  return streak;
+var idx = todayIndex();
+if(idx < 0) idx = 0;
+if(idx > TOTAL_WEEKS*7-1) idx = TOTAL_WEEKS*7-1;
+var streak = 0;
+for(var i=idx; i>=0; i--){
+var w = Math.floor(i/7), d = i%7;
+if(isDayFullyDone(w,d)) streak++;
+else break;
 }
-
-/* ================= STATE ================= */
-
+return streak;
+}
 function todayIndex(){
-  var now = new Date();
-  now.setHours(0,0,0,0);
-  return Math.round((now.getTime() - PROGRAM_START.getTime()) / 86400000);
+var now = new Date();
+now.setHours(0,0,0,0);
+return Math.round((now.getTime() - PROGRAM_START.getTime()) / 86400000);
 }
 function totalDays(){ return TOTAL_WEEKS*7; }
 function clampIndex(idx){ return Math.max(0, Math.min(totalDays()-1, idx)); }
-
 var state = { week:0, day:0 };
 (function initState(){
-  var idx = todayIndex();
-  if(idx < 0){ state.week=0; state.day=0; }
-  else if(idx >= totalDays()){ state.week=TOTAL_WEEKS-1; state.day=6; }
-  else { idx = clampIndex(idx); state.week = Math.floor(idx/7); state.day = idx%7; }
+var idx = todayIndex();
+if(idx < 0){ state.week=0; state.day=0; }
+else if(idx >= totalDays()){ state.week=TOTAL_WEEKS-1; state.day=6; }
+else { idx = clampIndex(idx); state.week = Math.floor(idx/7); state.day = idx%7; }
 })();
-
-/* ================= DOM REFS ================= */
-
 var $ = function(id){ return document.getElementById(id); };
-
 var elHeroWeek = $("hero-week-label");
 var elHeroPhase = $("hero-phase-label");
 var elHeroRange = $("hero-date-range");
 var elDaySelector = $("day-selector");
 var elResetOrder = $("reset-order");
-
 var elDhDay = $("dh-day");
 var elDhDate = $("dh-date");
 var elDhBadge = $("dh-badge");
-
 var elWTitle = $("w-title");
 var elWDesc = $("w-desc");
 var elWNote = $("w-note");
 var elCardWeight = $("card-weight");
 var elTickWeight = $("tick-weight");
-
 var elRTitle = $("r-title");
 var elRDesc = $("r-desc");
 var elTickRun = $("tick-run");
-
 var elFDesc = $("f-desc");
-
 var elMomentEmpty = $("moment-empty");
 var elMomentWrap = $("moment-photo-wrap");
 var elMomentImg = $("moment-photo");
-
 var elHeroScore = $("hero-score");
 var elHeroStreak = $("hero-streak");
 var elJrPhase = $("jr-phase");
@@ -1071,7 +309,6 @@ var elJrMarker = $("jr-marker");
 var elJrWeeksLeft = $("jr-weeksleft");
 var elJrProgress = $("jr-progress");
 var elJrLongrun = $("jr-longrun");
-
 var elOverlay = $("overlay");
 var elSheet = $("sheet");
 var elSheetTitle = $("sheet-title");
@@ -1080,7 +317,6 @@ var elSheetList = $("sheet-list");
 var elSheetNote = $("sheet-note");
 var elProfileForm = $("sheet-profile-form");
 var elToast = $("toast");
-
 var elAvatar = $("avatar");
 var elGreeting = $("greeting-text");
 var elSubgreeting = $("subgreeting-text");
@@ -1093,536 +329,459 @@ var elProfileAvatarPreview = $("profile-avatar-preview");
 var elProfileAvatarLetter = $("profile-avatar-letter");
 var elProfilePhotoRemove = $("profile-photo-remove");
 var elThemeToggle = $("theme-toggle");
-
 var navHome = $("nav-home"), navStats = $("nav-stats");
 var tabButtons = [navHome, navStats];
 var panels = { home: $("panel-home"), stats: $("panel-stats") };
-
-/* ================= PROFILE ================= */
-
 var PROFILE_KEY = "aum_fuji_sep_profile";
 var PROFILE_PHOTO_KEY = "aum_fuji_sep_profile_photo";
 function loadProfile(){
-  try{
-    var raw = localStorage.getItem(PROFILE_KEY);
-    if(raw) return JSON.parse(raw);
-  }catch(e){}
-  return { name:"Aum", plan:"Fuji Marathon • Hybrid Athlete", bio:"" };
+try{
+var raw = localStorage.getItem(PROFILE_KEY);
+if(raw) return JSON.parse(raw);
+}catch(e){}
+return { name:"Aum", plan:"Fuji Marathon • Hybrid Athlete", bio:"" };
 }
 var profile = loadProfile();
-
 function getProfilePhoto(){
-  try{ return localStorage.getItem(PROFILE_PHOTO_KEY); }catch(e){ return null; }
+try{ return localStorage.getItem(PROFILE_PHOTO_KEY); }catch(e){ return null; }
 }
 function setProfilePhoto(dataUrl){
-  try{
-    if(dataUrl) localStorage.setItem(PROFILE_PHOTO_KEY, dataUrl);
-    else localStorage.removeItem(PROFILE_PHOTO_KEY);
-    return true;
-  }catch(e){ return false; }
+try{
+if(dataUrl) localStorage.setItem(PROFILE_PHOTO_KEY, dataUrl);
+else localStorage.removeItem(PROFILE_PHOTO_KEY);
+return true;
+}catch(e){ return false; }
 }
 function applyAvatar(el, letterEl, name, photo){
-  if(photo){
-    el.classList.add("has-photo");
-    el.style.backgroundImage = "url(" + photo + ")";
-  } else {
-    el.classList.remove("has-photo");
-    el.style.backgroundImage = "";
-  }
-  letterEl.textContent = name.charAt(0).toUpperCase() || "A";
+if(photo){
+el.classList.add("has-photo");
+el.style.backgroundImage = "url(" + photo + ")";
+} else {
+el.classList.remove("has-photo");
+el.style.backgroundImage = "";
 }
-
+letterEl.textContent = name.charAt(0).toUpperCase() || "A";
+}
 function saveProfile(){
-  profile.name = elProfileNameInput.value;
-  profile.plan = elProfilePlanInput.value;
-  profile.bio = elProfileBioInput.value;
-  try{ localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); }catch(e){}
-  renderProfile();
+profile.name = elProfileNameInput.value;
+profile.plan = elProfilePlanInput.value;
+profile.bio = elProfileBioInput.value;
+try{ localStorage.setItem(PROFILE_KEY, JSON.stringify(profile)); }catch(e){}
+renderProfile();
 }
 function renderProfile(){
-  var name = (profile.name && profile.name.trim()) ? profile.name.trim() : "Aum";
-  var plan = (profile.plan && profile.plan.trim()) ? profile.plan.trim() : "Fuji Marathon • Hybrid Athlete";
-  var bio = profile.bio ? profile.bio.trim() : "";
-  var photo = getProfilePhoto();
-  elGreeting.textContent = name + ", ready to train?";
-  elSubgreeting.textContent = plan;
-  applyAvatar(elAvatar, elAvatarLetter, name, photo);
-  applyAvatar(elProfileAvatarPreview, elProfileAvatarLetter, name, photo);
-  elProfilePhotoRemove.style.display = photo ? "" : "none";
-  if(bio){ elBioText.textContent = bio; elBioText.classList.remove("placeholder"); }
-  else { elBioText.textContent = "เพิ่มคำคมหรือ bio ของคุณ"; elBioText.classList.add("placeholder"); }
+var name = (profile.name && profile.name.trim()) ? profile.name.trim() : "Aum";
+var plan = (profile.plan && profile.plan.trim()) ? profile.plan.trim() : "Fuji Marathon • Hybrid Athlete";
+var bio = profile.bio ? profile.bio.trim() : "";
+var photo = getProfilePhoto();
+elGreeting.textContent = name + ", ready to train?";
+elSubgreeting.textContent = plan;
+applyAvatar(elAvatar, elAvatarLetter, name, photo);
+applyAvatar(elProfileAvatarPreview, elProfileAvatarLetter, name, photo);
+elProfilePhotoRemove.style.display = photo ? "" : "none";
+if(bio){ elBioText.textContent = bio; elBioText.classList.remove("placeholder"); }
+else { elBioText.textContent = "เพิ่มคำคมหรือ bio ของคุณ"; elBioText.classList.add("placeholder"); }
 }
 elProfileNameInput.addEventListener("input", saveProfile);
 elProfilePlanInput.addEventListener("input", saveProfile);
 elProfileBioInput.addEventListener("input", saveProfile);
-
 $("header-tap").addEventListener("click", function(){ openSheet("profile"); });
 $("bio-row").addEventListener("click", function(){ openSheet("profile"); });
-
 $("profile-photo-btn").addEventListener("click", function(){ $("profile-photo-input").click(); });
 $("profile-photo-input").addEventListener("change", function(e){
-  var file = e.target.files && e.target.files[0];
-  if(!file) return;
-  var reader = new FileReader();
-  reader.onload = function(ev){
-    var img = new Image();
-    img.onload = function(){
-      var maxDim = 400;
-      var w = img.width, h = img.height;
-      var side = Math.min(w, h);
-      var sx = (w - side) / 2, sy = (h - side) / 2;
-      var canvas = document.createElement("canvas");
-      canvas.width = maxDim; canvas.height = maxDim;
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(img, sx, sy, side, side, 0, 0, maxDim, maxDim);
-      var dataUrl = canvas.toDataURL("image/jpeg", 0.8);
-      var ok = setProfilePhoto(dataUrl);
-      if(ok){ renderProfile(); showToast("เปลี่ยนรูปโปรไฟล์แล้ว"); }
-      else{ showToast("บันทึกรูปไม่สำเร็จ พื้นที่เก็บข้อมูลอาจไม่พอ"); }
-    };
-    img.src = ev.target.result;
-  };
-  reader.readAsDataURL(file);
-  e.target.value = "";
+var file = e.target.files && e.target.files[0];
+if(!file) return;
+var reader = new FileReader();
+reader.onload = function(ev){
+var img = new Image();
+img.onload = function(){
+var maxDim = 400;
+var w = img.width, h = img.height;
+var side = Math.min(w, h);
+var sx = (w - side) / 2, sy = (h - side) / 2;
+var canvas = document.createElement("canvas");
+canvas.width = maxDim; canvas.height = maxDim;
+var ctx = canvas.getContext("2d");
+ctx.drawImage(img, sx, sy, side, side, 0, 0, maxDim, maxDim);
+var dataUrl = canvas.toDataURL("image/jpeg", 0.8);
+var ok = setProfilePhoto(dataUrl);
+if(ok){ renderProfile(); showToast("เปลี่ยนรูปโปรไฟล์แล้ว"); }
+else{ showToast("บันทึกรูปไม่สำเร็จ พื้นที่เก็บข้อมูลอาจไม่พอ"); }
+};
+img.src = ev.target.result;
+};
+reader.readAsDataURL(file);
+e.target.value = "";
 });
 $("profile-photo-remove").addEventListener("click", function(){
-  if(confirm("ลบรูปโปรไฟล์?")){
-    setProfilePhoto(null);
-    renderProfile();
-  }
+if(confirm("ลบรูปโปรไฟล์?")){
+setProfilePhoto(null);
+renderProfile();
+}
 });
-
-/* ================= THEME ================= */
-
 elThemeToggle.addEventListener("click", function(){
-  var cur = document.documentElement.getAttribute("data-theme") || "light";
-  var next = cur === "dark" ? "light" : "dark";
-  document.documentElement.setAttribute("data-theme", next);
-  try{ localStorage.setItem("aum_fuji_sep_theme", next); }catch(e){}
+var cur = document.documentElement.getAttribute("data-theme") || "light";
+var next = cur === "dark" ? "light" : "dark";
+document.documentElement.setAttribute("data-theme", next);
+try{ localStorage.setItem("aum_fuji_sep_theme", next); }catch(e){}
 });
-
-
-/* ================= TAB SWITCHING ================= */
-
 function setTab(tab){
-  Object.keys(panels).forEach(function(k){ panels[k].classList.toggle("active", k===tab); });
-  tabButtons.forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-tab")===tab); });
-  if(tab==="stats") positionMarkerAbsolute();
+Object.keys(panels).forEach(function(k){ panels[k].classList.toggle("active", k===tab); });
+tabButtons.forEach(function(b){ b.classList.toggle("active", b.getAttribute("data-tab")===tab); });
+if(tab==="stats") positionMarkerAbsolute();
 }
 tabButtons.forEach(function(b){
-  b.addEventListener("click", function(){ setTab(b.getAttribute("data-tab")); });
+b.addEventListener("click", function(){ setTab(b.getAttribute("data-tab")); });
 });
-
-/* ================= TOAST ================= */
-
 var toastTimer = null;
 function showToast(msg){
-  elToast.textContent = msg;
-  elToast.classList.add("show");
-  clearTimeout(toastTimer);
-  toastTimer = setTimeout(function(){ elToast.classList.remove("show"); }, 2400);
+elToast.textContent = msg;
+elToast.classList.add("show");
+clearTimeout(toastTimer);
+toastTimer = setTimeout(function(){ elToast.classList.remove("show"); }, 2400);
 }
-
-/* ================= RENDER ================= */
-
 function render(){
-  renderProfile();
-  renderHero();
-  renderDaySelector();
-  renderDaily();
-  renderStats();
+renderProfile();
+renderHero();
+renderDaySelector();
+renderDaily();
+renderStats();
 }
-
 function renderHero(){
-  elHeroWeek.textContent = "Week "+(state.week+1)+" / "+TOTAL_WEEKS;
-  elHeroPhase.textContent = phaseForWeek(state.week)+" Phase";
-  var start = dateForDay(state.week,0), end = dateForDay(state.week,6);
-  elHeroRange.textContent = fmtDate(start)+" – "+fmtDate(end);
-  $("wn-prev").disabled = state.week<=0;
-  $("wn-next").disabled = state.week>=TOTAL_WEEKS-1;
-  elResetOrder.style.display = isWeekOrderDefault(state.week) ? "none" : "block";
+elHeroWeek.textContent = "Week "+(state.week+1)+" / "+TOTAL_WEEKS;
+elHeroPhase.textContent = phaseForWeek(state.week)+" Phase";
+var start = dateForDay(state.week,0), end = dateForDay(state.week,6);
+elHeroRange.textContent = fmtDate(start)+" – "+fmtDate(end);
+$("wn-prev").disabled = state.week<=0;
+$("wn-next").disabled = state.week>=TOTAL_WEEKS-1;
+elResetOrder.style.display = isWeekOrderDefault(state.week) ? "none" : "block";
 }
-
 var dragCtx = null;
-
 function runShortLabel(weekIdx, displayDay){
-  var r = getRun(weekIdx, displayDay);
-  if(r.type==="long") return "LOR";
-  if(r.type==="easy") return "Easy";
-  if(r.type==="quality"){
-    var t = r.title;
-    if(t.indexOf("Tempo")>-1) return "TP";
-    if(t.indexOf("VO2")>-1) return "INV";
-    return "QLT";
-  }
-  if(r.type==="recovery") return "Rec";
-  if(r.type==="choice") return "MP";
-  if(r.type==="mobility") return "Mob";
-  if(r.type==="rest") return "Rest";
-  return r.title;
+var r = getRun(weekIdx, displayDay);
+if(r.type==="long") return "LOR";
+if(r.type==="easy") return "Easy";
+if(r.type==="quality"){
+var t = r.title;
+if(t.indexOf("Tempo")>-1) return "TP";
+if(t.indexOf("VO2")>-1) return "INV";
+return "QLT";
+}
+if(r.type==="recovery") return "Rec";
+if(r.type==="choice") return "MP";
+if(r.type==="mobility") return "Mob";
+if(r.type==="rest") return "Rest";
+return r.title;
 }
 function weightShortLabel(weekIdx, displayDay){
-  var w = getWeight(weekIdx, displayDay);
-  if(!w) return "Rest";
-  switch(w.key){
-    case "chest":    return "Che";
-    case "back":     return "Bac";
-    case "shoulder": return "ShoA";
-    case "legs":     return "Leg";
-  }
-  return w.label;
+var w = getWeight(weekIdx, displayDay);
+if(!w) return "Rest";
+switch(w.key){
+case "chest":    return "Che";
+case "back":     return "Bac";
+case "shoulder": return "ShoA";
+case "legs":     return "Leg";
 }
-
+return w.label;
+}
 function renderDaySelector(){
-  elDaySelector.innerHTML = "";
-  var tIdx = todayIndex();
-  for(var d=0; d<7; d++){
-    var date = dateForDay(state.week,d);
-    var isActive = d===state.day;
-    var isToday = (state.week*7+d)===tIdx;
-    var wDone = isWeightDone(state.week,d);
-    var rDone = isRunDone(state.week,d);
-    var hasWeight = !!getWeight(state.week,d);
-
-    var chip = document.createElement("div");
-    chip.className = "day-chip" + (isActive ? " active":"") + (isToday ? " is-today":"");
-    chip.setAttribute("data-day", d);
-
-    var head = '<div class="dc-head"><span class="dc-head-label">'+DAY_SHORT_TH[d]+'</span><span class="dc-head-num">'+date.getDate()+'</span></div>';
-
-    var wLabel = weightShortLabel(state.week, d);
-    var rLabel = runShortLabel(state.week, d);
-    var wRow = '<div class="dc-row weight-row" data-type="weight" data-day="'+d+'"><span class="dc-row-dot"></span>'+wLabel+'</div>';
-    var rRow = '<div class="dc-row run-row" data-type="run" data-day="'+d+'"><span class="dc-row-dot"></span>'+rLabel+'</div>';
-
-    var wDot = '<div class="dc-done-dot'+(hasWeight && wDone ? ' on':'')+'"></div>';
-    var rDot = '<div class="dc-done-dot'+(rDone ? ' on':'')+'"></div>';
-    var dots = '<div class="dc-done-dots">'+(hasWeight ? wDot : '')+ rDot+'</div>';
-
-    chip.innerHTML = head+'<div class="dc-rows">'+wRow+rRow+'</div>'+dots;
-
-    // tap the chip background = select day
-    chip.addEventListener("pointerdown", function(e){
-      if(e.target.closest(".dc-row")) return; // let row handle it
-      state.day = parseInt(this.getAttribute("data-day"), 10);
-      render();
-    });
-
-    // attach drag to each row
-    var wRowEl = chip.querySelector(".weight-row");
-    var rRowEl = chip.querySelector(".run-row");
-    if(wRowEl) attachRowDrag(wRowEl, d, "weight");
-    if(rRowEl) attachRowDrag(rRowEl, d, "run");
-
-    elDaySelector.appendChild(chip);
-  }
+elDaySelector.innerHTML = "";
+var tIdx = todayIndex();
+for(var d=0; d<7; d++){
+var date = dateForDay(state.week,d);
+var isActive = d===state.day;
+var isToday = (state.week*7+d)===tIdx;
+var wDone = isWeightDone(state.week,d);
+var rDone = isRunDone(state.week,d);
+var hasWeight = !!getWeight(state.week,d);
+var chip = document.createElement("div");
+chip.className = "day-chip" + (isActive ? " active":"") + (isToday ? " is-today":"");
+chip.setAttribute("data-day", d);
+var head = '<div class="dc-head"><span class="dc-head-label">'+DAY_SHORT_TH[d]+'</span><span class="dc-head-num">'+date.getDate()+'</span></div>';
+var wLabel = weightShortLabel(state.week, d);
+var rLabel = runShortLabel(state.week, d);
+var wRow = '<div class="dc-row weight-row" data-type="weight" data-day="'+d+'"><span class="dc-row-dot"></span>'+wLabel+'</div>';
+var rRow = '<div class="dc-row run-row" data-type="run" data-day="'+d+'"><span class="dc-row-dot"></span>'+rLabel+'</div>';
+var wDot = '<div class="dc-done-dot'+(hasWeight && wDone ? ' on':'')+'"></div>';
+var rDot = '<div class="dc-done-dot'+(rDone ? ' on':'')+'"></div>';
+var dots = '<div class="dc-done-dots">'+(hasWeight ? wDot : '')+ rDot+'</div>';
+chip.innerHTML = head+'<div class="dc-rows">'+wRow+rRow+'</div>'+dots;
+chip.addEventListener("pointerdown", function(e){
+if(e.target.closest(".dc-row")) return;
+state.day = parseInt(this.getAttribute("data-day"), 10);
+render();
+});
+var wRowEl = chip.querySelector(".weight-row");
+var rRowEl = chip.querySelector(".run-row");
+if(wRowEl) attachRowDrag(wRowEl, d, "weight");
+if(rRowEl) attachRowDrag(rRowEl, d, "run");
+elDaySelector.appendChild(chip);
 }
-
+}
 function attachRowDrag(rowEl, dayIdx, type){
-  rowEl.addEventListener("pointerdown", function(e){
-    e.stopPropagation();
-    dragCtx = { rowEl:rowEl, type:type, startIndex:dayIdx, startX:e.clientX, startY:e.clientY, moved:false, hoverIndex:dayIdx };
-    try{ rowEl.setPointerCapture(e.pointerId); }catch(err){}
-  });
-
-  rowEl.addEventListener("pointermove", function(e){
-    if(!dragCtx || dragCtx.rowEl!==rowEl) return;
-    var dx = e.clientX - dragCtx.startX;
-    var dy = e.clientY - dragCtx.startY;
-    if(!dragCtx.moved && (Math.abs(dx) > 7 || Math.abs(dy) > 7)){
-      dragCtx.moved = true;
-      rowEl.classList.add("dragging-pill");
-    }
-    if(dragCtx.moved){
-      rowEl.style.transform = "translateX("+dx+"px)";
-      var chips = Array.prototype.slice.call(elDaySelector.children);
-      var hoverIdx = dragCtx.startIndex;
-      chips.forEach(function(c, ci){
-        var rows = c.querySelectorAll(".dc-row");
-        rows.forEach(function(r){ r.classList.remove("drop-target-row"); });
-        var rect = c.getBoundingClientRect();
-        if(e.clientX >= rect.left && e.clientX <= rect.right && ci !== dragCtx.startIndex){
-          hoverIdx = ci;
-          var targetRow = c.querySelector("."+ dragCtx.type +"-row");
-          if(targetRow) targetRow.classList.add("drop-target-row");
-        }
-      });
-      dragCtx.hoverIndex = hoverIdx;
-    }
-  });
-
-  rowEl.addEventListener("pointerup", function(){
-    if(!dragCtx || dragCtx.rowEl!==rowEl) return;
-    var wasMoved = dragCtx.moved;
-    var hoverIdx = dragCtx.hoverIndex;
-    var startIdx = dragCtx.startIndex;
-    var dtype = dragCtx.type;
-    rowEl.classList.remove("dragging-pill");
-    rowEl.style.transform = "";
-    Array.prototype.slice.call(elDaySelector.children).forEach(function(c){
-      c.querySelectorAll(".dc-row").forEach(function(r){ r.classList.remove("drop-target-row"); });
-    });
-    dragCtx = null;
-
-    if(wasMoved && hoverIdx !== startIdx){
-      if(dtype === "weight") swapWeightDays(state.week, startIdx, hoverIdx);
-      else swapRunDays(state.week, startIdx, hoverIdx);
-      state.day = hoverIdx;
-      var typeTH = dtype === "weight" ? "Workout" : "Running";
-      showToast("ย้าย "+typeTH+": "+DAY_NAMES_TH[startIdx]+" → "+DAY_NAMES_TH[hoverIdx]);
-      render();
-    } else if(!wasMoved){
-      state.day = dayIdx;
-      render();
-    }
-  });
-
-  rowEl.addEventListener("pointercancel", function(){
-    if(dragCtx && dragCtx.rowEl===rowEl){
-      rowEl.classList.remove("dragging-pill");
-      rowEl.style.transform = "";
-      Array.prototype.slice.call(elDaySelector.children).forEach(function(c){
-        c.querySelectorAll(".dc-row").forEach(function(r){ r.classList.remove("drop-target-row"); });
-      });
-      dragCtx = null;
-    }
-  });
+rowEl.addEventListener("pointerdown", function(e){
+e.stopPropagation();
+dragCtx = { rowEl:rowEl, type:type, startIndex:dayIdx, startX:e.clientX, startY:e.clientY, moved:false, hoverIndex:dayIdx };
+try{ rowEl.setPointerCapture(e.pointerId); }catch(err){}
+});
+rowEl.addEventListener("pointermove", function(e){
+if(!dragCtx || dragCtx.rowEl!==rowEl) return;
+var dx = e.clientX - dragCtx.startX;
+var dy = e.clientY - dragCtx.startY;
+if(!dragCtx.moved && (Math.abs(dx) > 7 || Math.abs(dy) > 7)){
+dragCtx.moved = true;
+rowEl.classList.add("dragging-pill");
 }
-
+if(dragCtx.moved){
+rowEl.style.transform = "translateX("+dx+"px)";
+var chips = Array.prototype.slice.call(elDaySelector.children);
+var hoverIdx = dragCtx.startIndex;
+chips.forEach(function(c, ci){
+var rows = c.querySelectorAll(".dc-row");
+rows.forEach(function(r){ r.classList.remove("drop-target-row"); });
+var rect = c.getBoundingClientRect();
+if(e.clientX >= rect.left && e.clientX <= rect.right && ci !== dragCtx.startIndex){
+hoverIdx = ci;
+var targetRow = c.querySelector("."+ dragCtx.type +"-row");
+if(targetRow) targetRow.classList.add("drop-target-row");
+}
+});
+dragCtx.hoverIndex = hoverIdx;
+}
+});
+rowEl.addEventListener("pointerup", function(){
+if(!dragCtx || dragCtx.rowEl!==rowEl) return;
+var wasMoved = dragCtx.moved;
+var hoverIdx = dragCtx.hoverIndex;
+var startIdx = dragCtx.startIndex;
+var dtype = dragCtx.type;
+rowEl.classList.remove("dragging-pill");
+rowEl.style.transform = "";
+Array.prototype.slice.call(elDaySelector.children).forEach(function(c){
+c.querySelectorAll(".dc-row").forEach(function(r){ r.classList.remove("drop-target-row"); });
+});
+dragCtx = null;
+if(wasMoved && hoverIdx !== startIdx){
+if(dtype === "weight") swapWeightDays(state.week, startIdx, hoverIdx);
+else swapRunDays(state.week, startIdx, hoverIdx);
+state.day = hoverIdx;
+var typeTH = dtype === "weight" ? "Workout" : "Running";
+showToast("ย้าย "+typeTH+": "+DAY_NAMES_TH[startIdx]+" → "+DAY_NAMES_TH[hoverIdx]);
+render();
+} else if(!wasMoved){
+state.day = dayIdx;
+render();
+}
+});
+rowEl.addEventListener("pointercancel", function(){
+if(dragCtx && dragCtx.rowEl===rowEl){
+rowEl.classList.remove("dragging-pill");
+rowEl.style.transform = "";
+Array.prototype.slice.call(elDaySelector.children).forEach(function(c){
+c.querySelectorAll(".dc-row").forEach(function(r){ r.classList.remove("drop-target-row"); });
+});
+dragCtx = null;
+}
+});
+}
 function renderDaily(){
-  var date = dateForDay(state.week, state.day);
-  elDhDay.textContent = DAY_NAMES_TH[state.day];
-  elDhDate.textContent = fmtDateFull(date);
-  var tIdx = todayIndex();
-  var isToday = (state.week*7+state.day)===tIdx;
-  elDhBadge.style.display = isToday ? "" : "none";
-
-  var w = getWeight(state.week, state.day);
-  if(w){
-    elCardWeight.style.display = "";
-    elWTitle.textContent = w.title;
-    elWDesc.textContent = w.exercises.length + " ท่า • " + w.exercises[0];
-    if(w.note){ elWNote.style.display=""; elWNote.textContent = w.note; }
-    else { elWNote.style.display="none"; }
-    elTickWeight.classList.toggle("on", isWeightDone(state.week,state.day));
-  } else {
-    elCardWeight.style.display = "none";
-  }
-
-  var r = getRun(state.week, state.day);
-  elRTitle.textContent = r.title;
-  elRDesc.textContent = r.desc;
-  elTickRun.classList.toggle("on", isRunDone(state.week,state.day));
-
-  elFDesc.innerHTML = "<b>Fuel —</b> " + getFuel(state.week, state.day);
-
-  var photo = getPhoto(state.week, state.day);
-  if(photo){
-    elMomentEmpty.style.display = "none";
-    elMomentWrap.style.display = "";
-    elMomentImg.src = photo;
-  } else {
-    elMomentEmpty.style.display = "";
-    elMomentWrap.style.display = "none";
-    elMomentImg.src = "";
-  }
+var date = dateForDay(state.week, state.day);
+elDhDay.textContent = DAY_NAMES_TH[state.day];
+elDhDate.textContent = fmtDateFull(date);
+var tIdx = todayIndex();
+var isToday = (state.week*7+state.day)===tIdx;
+elDhBadge.style.display = isToday ? "" : "none";
+var w = getWeight(state.week, state.day);
+if(w){
+elCardWeight.style.display = "";
+elWTitle.textContent = w.title;
+elWDesc.textContent = w.exercises.length + " ท่า • " + w.exercises[0];
+if(w.note){ elWNote.style.display=""; elWNote.textContent = w.note; }
+else { elWNote.style.display="none"; }
+elTickWeight.classList.toggle("on", isWeightDone(state.week,state.day));
+} else {
+elCardWeight.style.display = "none";
 }
-
+var r = getRun(state.week, state.day);
+elRTitle.textContent = r.title;
+elRDesc.textContent = r.desc;
+elTickRun.classList.toggle("on", isRunDone(state.week,state.day));
+elFDesc.innerHTML = "<b>Fuel —</b> " + getFuel(state.week, state.day);
+var photo = getPhoto(state.week, state.day);
+if(photo){
+elMomentEmpty.style.display = "none";
+elMomentWrap.style.display = "";
+elMomentImg.src = photo;
+} else {
+elMomentEmpty.style.display = "";
+elMomentWrap.style.display = "none";
+elMomentImg.src = "";
+}
+}
 function renderStats(){
-  elHeroScore.textContent = weekScoreText(state.week);
-  var streak = currentStreak();
-  elHeroStreak.textContent = streak>0 ? ("Streak "+streak+" วันติด") : "เริ่มสตรีคแรกของสัปดาห์นี้กัน";
-
-  elJrPhase.textContent = phaseForWeek(state.week)+" Phase";
-  elJrVolume.textContent = volumeForWeek(state.week);
-  elJrWeeksLeft.textContent = (TOTAL_WEEKS - state.week - 1);
-  elJrProgress.textContent = Math.round(totalDonePoints()/totalMaxPoints()*100)+"%";
-  elJrLongrun.textContent = LONG_RUN_KM[state.week]+"K";
-  elJrMarker.style.display = "block";
+elHeroScore.textContent = weekScoreText(state.week);
+var streak = currentStreak();
+elHeroStreak.textContent = streak>0 ? ("Streak "+streak+" วันติด") : "เริ่มสตรีคแรกของสัปดาห์นี้กัน";
+elJrPhase.textContent = phaseForWeek(state.week)+" Phase";
+elJrVolume.textContent = volumeForWeek(state.week);
+elJrWeeksLeft.textContent = (TOTAL_WEEKS - state.week - 1);
+elJrProgress.textContent = Math.round(totalDonePoints()/totalMaxPoints()*100)+"%";
+elJrLongrun.textContent = LONG_RUN_KM[state.week]+"K";
+elJrMarker.style.display = "block";
 }
-
 function positionMarkerAbsolute(){
-  var track = document.querySelector(".journey-track");
-  if(!track) return;
-  var trackWidth = track.offsetWidth;
-  var pct = (state.week + 0.5) / TOTAL_WEEKS;
-  elJrMarker.style.left = (pct*trackWidth - 1.5) + "px";
+var track = document.querySelector(".journey-track");
+if(!track) return;
+var trackWidth = track.offsetWidth;
+var pct = (state.week + 0.5) / TOTAL_WEEKS;
+elJrMarker.style.left = (pct*trackWidth - 1.5) + "px";
 }
-
-/* ================= MODAL / SHEET ================= */
-
 function openSheet(type){
-  elSheetList.style.display = "";
-  elProfileForm.style.display = "none";
-
-  if(type==="profile"){
-    elSheetList.style.display = "none";
-    elSheetNote.style.display = "none";
-    elProfileForm.style.display = "";
-    elSheetTitle.textContent = "Profile";
-    elSheetSub.textContent = "แก้ไขชื่อ แผนการ และ bio ของคุณ";
-    elProfileNameInput.value = profile.name || "";
-    elProfilePlanInput.value = profile.plan || "";
-    elProfileBioInput.value = profile.bio || "";
-    elOverlay.classList.add("open");
-    elSheet.classList.add("open");
-    return;
-  }
-
-  if(type==="overview"){
-    elSheetNote.style.display = "none";
-    elSheetTitle.textContent = "ภาพรวมทั้งโปรแกรม";
-    elSheetSub.textContent = "23 สัปดาห์ • แตะสัปดาห์ไหนเพื่อไปดูที่ Home";
-    elSheetList.innerHTML = "";
-    for(var wi=0; wi<TOTAL_WEEKS; wi++){
-      var start = dateForDay(wi,0), end = dateForDay(wi,6);
-      var li = document.createElement("li");
-      li.style.listStyle = "none";
-      var btn = document.createElement("button");
-      btn.className = "week-row" + (wi===state.week ? " current" : "");
-      btn.innerHTML =
-        '<span class="wr-left"><span class="wr-num">'+(wi+1)+'</span>' +
-        '<span class="wr-info"><div class="wr-phase">'+phaseForWeek(wi)+'</div>' +
-        '<div class="wr-date">'+fmtDate(start)+' – '+fmtDate(end)+'</div></span></span>' +
-        '<span class="wr-long">Long '+LONG_RUN_KM[wi]+'K</span>';
-      btn.setAttribute("data-week", wi);
-      btn.addEventListener("click", function(){
-        state.week = parseInt(this.getAttribute("data-week"), 10);
-        if(state.day>6) state.day = 6;
-        closeSheet();
-        setTab("home");
-        render();
-      });
-      li.appendChild(btn);
-      elSheetList.appendChild(li);
-    }
-    elOverlay.classList.add("open");
-    elSheet.classList.add("open");
-    return;
-  }
-
-  var title, sub, items, note;
-  if(type==="weight"){
-    var w = getWeight(state.week, state.day);
-    if(!w) return;
-    title = w.title;
-    sub = DAY_NAMES_TH[state.day]+" • "+fmtDate(dateForDay(state.week,state.day));
-    items = w.exercises;
-    note = w.note;
-  } else if(type==="run"){
-    var r = getRun(state.week, state.day);
-    title = r.title;
-    sub = (r.meta && r.meta[0]) ? r.meta.map(function(m){return m[0]+": "+m[1];}).join(" • ") : "";
-    items = r.steps;
-    note = r.goal;
-  } else { return; }
-
-  elSheetTitle.textContent = title;
-  elSheetSub.textContent = sub;
-  elSheetList.innerHTML = "";
-  items.forEach(function(txt, i){
-    var li = document.createElement("li");
-    li.className = "ex-item";
-    li.innerHTML = '<span class="ex-num">'+(i+1)+'</span><span class="ex-text">'+txt+'</span>';
-    elSheetList.appendChild(li);
-  });
-  if(note){ elSheetNote.style.display=""; elSheetNote.textContent = note; }
-  else { elSheetNote.style.display="none"; }
-
-  elOverlay.classList.add("open");
-  elSheet.classList.add("open");
+elSheetList.style.display = "";
+elProfileForm.style.display = "none";
+if(type==="profile"){
+elSheetList.style.display = "none";
+elSheetNote.style.display = "none";
+elProfileForm.style.display = "";
+elSheetTitle.textContent = "Profile";
+elSheetSub.textContent = "แก้ไขชื่อ แผนการ และ bio ของคุณ";
+elProfileNameInput.value = profile.name || "";
+elProfilePlanInput.value = profile.plan || "";
+elProfileBioInput.value = profile.bio || "";
+elOverlay.classList.add("open");
+elSheet.classList.add("open");
+return;
+}
+if(type==="overview"){
+elSheetNote.style.display = "none";
+elSheetTitle.textContent = "ภาพรวมทั้งโปรแกรม";
+elSheetSub.textContent = "23 สัปดาห์ • แตะสัปดาห์ไหนเพื่อไปดูที่ Home";
+elSheetList.innerHTML = "";
+for(var wi=0; wi<TOTAL_WEEKS; wi++){
+var start = dateForDay(wi,0), end = dateForDay(wi,6);
+var li = document.createElement("li");
+li.style.listStyle = "none";
+var btn = document.createElement("button");
+btn.className = "week-row" + (wi===state.week ? " current" : "");
+btn.innerHTML = '<span class="wr-left"><span class="wr-num">'+(wi+1)+'</span>' + '<span class="wr-info"><div class="wr-phase">'+phaseForWeek(wi)+'</div>' + '<div class="wr-date">'+fmtDate(start)+' – '+fmtDate(end)+'</div></span></span>' + '<span class="wr-long">Long '+LONG_RUN_KM[wi]+'K</span>';
+btn.setAttribute("data-week", wi);
+btn.addEventListener("click", function(){
+state.week = parseInt(this.getAttribute("data-week"), 10);
+if(state.day>6) state.day = 6;
+closeSheet();
+setTab("home");
+render();
+});
+li.appendChild(btn);
+elSheetList.appendChild(li);
+}
+elOverlay.classList.add("open");
+elSheet.classList.add("open");
+return;
+}
+var title, sub, items, note;
+if(type==="weight"){
+var w = getWeight(state.week, state.day);
+if(!w) return;
+title = w.title;
+sub = DAY_NAMES_TH[state.day]+" • "+fmtDate(dateForDay(state.week,state.day));
+items = w.exercises;
+note = w.note;
+} else if(type==="run"){
+var r = getRun(state.week, state.day);
+title = r.title;
+sub = (r.meta && r.meta[0]) ? r.meta.map(function(m){return m[0]+": "+m[1];}).join(" • ") : "";
+items = r.steps;
+note = r.goal;
+} else { return; }
+elSheetTitle.textContent = title;
+elSheetSub.textContent = sub;
+elSheetList.innerHTML = "";
+items.forEach(function(txt, i){
+var li = document.createElement("li");
+li.className = "ex-item";
+li.innerHTML = '<span class="ex-num">'+(i+1)+'</span><span class="ex-text">'+txt+'</span>';
+elSheetList.appendChild(li);
+});
+if(note){ elSheetNote.style.display=""; elSheetNote.textContent = note; }
+else { elSheetNote.style.display="none"; }
+elOverlay.classList.add("open");
+elSheet.classList.add("open");
 }
 function closeSheet(){
-  elOverlay.classList.remove("open");
-  elSheet.classList.remove("open");
+elOverlay.classList.remove("open");
+elSheet.classList.remove("open");
 }
-
-/* ================= PHOTO HANDLING ================= */
-
 function handlePhotoFile(file){
-  if(!file) return;
-  var reader = new FileReader();
-  reader.onload = function(e){
-    var img = new Image();
-    img.onload = function(){
-      var maxDim = 900;
-      var w = img.width, h = img.height;
-      if(w >= h){ if(w > maxDim){ h = Math.round(h*maxDim/w); w = maxDim; } }
-      else { if(h > maxDim){ w = Math.round(w*maxDim/h); h = maxDim; } }
-      var canvas = document.createElement("canvas");
-      canvas.width = w; canvas.height = h;
-      var ctx = canvas.getContext("2d");
-      ctx.drawImage(img, 0, 0, w, h);
-      var dataUrl = canvas.toDataURL("image/jpeg", 0.72);
-      var ok = setPhoto(state.week, state.day, dataUrl);
-      if(ok){ setTab("home"); render(); showToast("เพิ่มโมเมนต์ของวันนี้แล้ว"); }
-      else{ showToast("บันทึกรูปไม่สำเร็จ พื้นที่เก็บข้อมูลอาจไม่พอ"); }
-    };
-    img.src = e.target.result;
-  };
-  reader.readAsDataURL(file);
+if(!file) return;
+var reader = new FileReader();
+reader.onload = function(e){
+var img = new Image();
+img.onload = function(){
+var maxDim = 900;
+var w = img.width, h = img.height;
+if(w >= h){ if(w > maxDim){ h = Math.round(h*maxDim/w); w = maxDim; } }
+else { if(h > maxDim){ w = Math.round(w*maxDim/h); h = maxDim; } }
+var canvas = document.createElement("canvas");
+canvas.width = w; canvas.height = h;
+var ctx = canvas.getContext("2d");
+ctx.drawImage(img, 0, 0, w, h);
+var dataUrl = canvas.toDataURL("image/jpeg", 0.72);
+var ok = setPhoto(state.week, state.day, dataUrl);
+if(ok){ setTab("home"); render(); showToast("เพิ่มโมเมนต์ของวันนี้แล้ว"); }
+else{ showToast("บันทึกรูปไม่สำเร็จ พื้นที่เก็บข้อมูลอาจไม่พอ"); }
+};
+img.src = e.target.result;
+};
+reader.readAsDataURL(file);
 }
-
-/* ================= EVENTS ================= */
-
 $("wn-prev").addEventListener("click", function(){
-  if(state.week>0){ state.week--; if(state.day>6) state.day=6; render(); }
+if(state.week>0){ state.week--; if(state.day>6) state.day=6; render(); }
 });
 $("wn-next").addEventListener("click", function(){
-  if(state.week<TOTAL_WEEKS-1){ state.week++; render(); }
+if(state.week<TOTAL_WEEKS-1){ state.week++; render(); }
 });
 $("btn-today").addEventListener("click", function(){
-  var idx = clampIndex(todayIndex());
-  state.week = Math.floor(idx/7); state.day = idx%7;
-  setTab("home");
-  render();
+var idx = clampIndex(todayIndex());
+state.week = Math.floor(idx/7); state.day = idx%7;
+setTab("home");
+render();
 });
 $("reset-order").addEventListener("click", function(){
-  resetAllOrders(state.week);
-  showToast("รีเซ็ตลำดับสัปดาห์นี้แล้ว");
-  render();
+resetAllOrders(state.week);
+showToast("รีเซ็ตลำดับสัปดาห์นี้แล้ว");
+render();
 });
-
 document.querySelectorAll(".card-link[data-open]").forEach(function(btn){
-  btn.addEventListener("click", function(){ openSheet(this.getAttribute("data-open")); });
+btn.addEventListener("click", function(){ openSheet(this.getAttribute("data-open")); });
 });
-
 elTickWeight.addEventListener("click", function(){
-  setWeightDone(state.week, state.day, !isWeightDone(state.week,state.day));
-  render();
+setWeightDone(state.week, state.day, !isWeightDone(state.week,state.day));
+render();
 });
 elTickRun.addEventListener("click", function(){
-  setRunDone(state.week, state.day, !isRunDone(state.week,state.day));
-  render();
+setRunDone(state.week, state.day, !isRunDone(state.week,state.day));
+render();
 });
-
 $("sheet-close").addEventListener("click", closeSheet);
 $("sheet-back").addEventListener("click", closeSheet);
 elOverlay.addEventListener("click", closeSheet);
 $("btn-overview").addEventListener("click", function(){ openSheet("overview"); });
-
 $("nav-plus").addEventListener("click", function(){
-  $("photo-input").click();
+$("photo-input").click();
 });
 $("photo-input").addEventListener("change", function(e){
-  var file = e.target.files && e.target.files[0];
-  handlePhotoFile(file);
-  e.target.value = "";
+var file = e.target.files && e.target.files[0];
+handlePhotoFile(file);
+e.target.value = "";
 });
 $("moment-remove").addEventListener("click", function(){
-  if(confirm("ลบรูปโมเมนต์ของวันนี้?")){
-    setPhoto(state.week, state.day, null);
-    render();
-  }
+if(confirm("ลบรูปโมเมนต์ของวันนี้?")){
+setPhoto(state.week, state.day, null);
+render();
+}
 });
-
 window.addEventListener("resize", positionMarkerAbsolute);
-
-/* ================= INIT ================= */
 render();
 setTimeout(positionMarkerAbsolute, 50);
-
-})();
-</script>
-</body>
-</html>
+})();</script></body></html>
