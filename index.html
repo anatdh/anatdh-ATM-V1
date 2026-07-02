@@ -187,37 +187,60 @@ button{font-family:inherit;}
 }
 
 .day-selector{
-  display:flex; gap:8px; overflow-x:auto; scrollbar-width:none;
+  display:flex; gap:7px; overflow-x:auto; scrollbar-width:none;
   padding:14px 2px 4px;
 }
 .day-selector::-webkit-scrollbar{display:none;}
 .day-chip{
-  flex:0 0 auto; width:46px;
-  display:flex;flex-direction:column;align-items:center;gap:5px;
-  padding:9px 0 8px;
-  border-radius:18px;
+  flex:0 0 auto; width:76px;
+  display:flex; flex-direction:column;
+  border-radius:16px;
   background:var(--cream);
   border:2px solid transparent;
   position:relative;
-  touch-action:none;
-  user-select:none;
-  -webkit-user-select:none;
+  user-select:none; -webkit-user-select:none;
+  overflow:visible;
 }
-.day-chip .dlabel{font-size:11px;font-weight:700;color:var(--ink-soft);}
-.day-chip .dnum{font-size:14px;font-weight:800;color:var(--ink);}
-.day-chip.active{background:var(--black);}
-.day-chip.active .dlabel,.day-chip.active .dnum{color:#fff;}
-.day-chip .dot{
-  position:absolute; bottom:4px; width:5px;height:5px;border-radius:50%;
-  background:var(--pink-strong);
+.day-chip.active{ background:var(--black);}
+.day-chip.active .dc-head-label,.day-chip.active .dc-head-num{color:rgba(255,255,255,0.7); }
+.day-chip.active .dc-head-num{color:#fff;}
+.day-chip.is-today:not(.active) .dc-head-num::after{
+  content:""; display:inline-block; width:5px;height:5px; border-radius:50%;
+  background:var(--pink-strong); margin-left:3px; vertical-align:middle;
 }
-.day-chip.active .dot{background:#fff;}
-.day-chip.is-today:not(.active)::after{
-  content:""; position:absolute; top:5px; right:6px; width:6px;height:6px;
-  border-radius:50%; background:var(--pink-strong);
+.dc-head{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:8px 8px 5px;
 }
-.day-chip.dragging{z-index:8; box-shadow:var(--shadow); border-color:var(--ink);}
-.day-chip.drop-target{border-color:var(--pink-strong); background:var(--pink-bg);}
+.dc-head-label{font-size:10px; font-weight:800; color:var(--ink-soft);}
+.dc-head-num{font-size:13px; font-weight:800; color:var(--ink);}
+.dc-rows{display:flex; flex-direction:column; gap:4px; padding:0 6px 8px;}
+
+/* ---- draggable pill rows inside each chip ---- */
+.dc-row{
+  display:flex; align-items:center; gap:5px;
+  border-radius:9px; padding:5px 7px;
+  font-size:10px; font-weight:800;
+  touch-action:none; cursor:grab; position:relative;
+  white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+}
+.dc-row.weight-row{ background:var(--green-bg); color:var(--green-ink);}
+.dc-row.run-row{ background:var(--blue-bg); color:var(--blue-ink);}
+.day-chip.active .dc-row.weight-row{ background:rgba(175,207,160,0.18); color:#BFE0AE;}
+.day-chip.active .dc-row.run-row{ background:rgba(167,200,230,0.18); color:#A7C8E6;}
+.dc-row-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0;}
+.dc-row.weight-row .dc-row-dot{background:var(--green-ink);}
+.dc-row.run-row .dc-row-dot{background:var(--blue-ink);}
+.dc-row.dragging-pill{
+  z-index:9; box-shadow:var(--shadow); opacity:0.9; cursor:grabbing;
+  border:1.5px solid var(--ink);
+}
+.dc-row.drop-target-row{box-shadow:0 0 0 2px var(--pink-strong) inset; opacity:1;}
+.dc-done-dots{display:flex; justify-content:center; gap:3px; padding:0 0 7px;}
+.dc-done-dot{width:5px;height:5px;border-radius:50%; background:var(--line);}
+.dc-done-dot.on{ background:var(--pink-strong);}
+.day-chip.active .dc-done-dot{ background:rgba(255,255,255,0.3);}
+.day-chip.active .dc-done-dot.on{ background:#fff;}
 .reset-order{
   display:block; margin:6px auto 0; border:none; background:none;
   font-size:11px; font-weight:700; color:var(--muted); text-decoration:underline;
@@ -506,7 +529,7 @@ button{font-family:inherit;}
       <div class="date-range" id="hero-date-range">22 มิ.ย. – 28 มิ.ย.</div>
 
       <div class="day-selector" id="day-selector"></div>
-      <div class="drag-hint">กดค้างแล้วลากวันที่ เพื่อสลับโปรแกรมกันได้</div>
+      <div class="drag-hint">ลากแถว Workout หรือ Running เพื่อสลับแยกกันได้</div>
       <button class="reset-order" id="reset-order" style="display:none;">รีเซ็ตลำดับสัปดาห์นี้</button>
     </div>
 
@@ -693,32 +716,32 @@ var WEIGHT_DAYS = ["chest","back","shoulder","legs",null,null,null];
 
 var WEIGHT_PROGRAMS = {
   chest:{ label:"Chest", title:"Chest", exercises:[
-      "Bench Press 4x6–8",
-      "Incline Dumbbell Press 3x8–10",
-      "Cable Fly 3x12–15",
-      "Push-up 2 sets",
-      "Triceps Pushdown 2–3x10–12"
+      "Barbell Incline Bench Press 4x5–8",
+      "Cable Fly Mid 3x10–12",
+      "Cable Fly Low 3x12–15",
+      "Dumbbell Bicep Curl 3x10–12",
+      "Machine Ab Crunch 3x15"
   ]},
   back:{ label:"Back", title:"Back", exercises:[
-      "Pull-up / Lat Pulldown 4x8–12",
-      "Seated Row / Barbell Row 3x8–12",
-      "One-arm Dumbbell Row 3x10/ข้าง",
-      "Face Pull 3x15–20",
-      "Biceps Curl 2x10–12"
+      "Machine Lat Pulldown Wide-Grip 4x8–12",
+      "Machine Hammer-Grip Row 3x8–12",
+      "Cable V-Handle Seated Row 3x10–12",
+      "Pull-Up 3x6–10",
+      "Cable Face Pull 3x15–20"
   ]},
   shoulder:{ label:"Shoulder + Arms", title:"Shoulder + Arms", exercises:[
-      "Overhead Press / Shoulder Press 3x6–8",
-      "Lateral Raise 4x12–15",
-      "Rear Delt Fly 3x15–20",
-      "Biceps Curl 3x10–12",
-      "Triceps Pushdown / Overhead Extension 3x10–12"
+      "Dumbbell Shoulder Press 4x6–8",
+      "Dumbbell Lateral Raise 3x12–15",
+      "Barbell Bicep Curl 3x8–12",
+      "Dumbbell Chest-Supported Row 3x10–12",
+      "Dumbbell Hammer Curl 3x12"
   ]},
   legs:{ label:"Legs", title:"Legs", exercises:[
-      "Squat / Leg Press 4x5–8",
-      "Romanian Deadlift 3x6–8",
-      "Bulgarian Split Squat 3x8–10/ข้าง",
-      "Calf Raise 4x12–15",
-      "Core 5–10 นาที"
+      "Barbell Back Squat 4x5–8",
+      "Barbell Deadlift 3x6–8",
+      "Dumbbell Bulgarian Split Squat 3x8–10/ข้าง",
+      "Machine Ab Crunch 3x15",
+      "Core / Plank 5 นาที"
   ]}
 };
 
@@ -855,41 +878,54 @@ function getRunBySlot(weekIdx, slot){
   }
 }
 
-/* ---- slot order per week: lets the person drag-swap which day shows which session ---- */
+/* ---- SEPARATE slot orders: weight and run can be swapped independently ---- */
 
-function orderKey(weekIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_order"; }
-function getSlotOrder(weekIdx){
+function wOrderKey(weekIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_worder"; }
+function rOrderKey(weekIdx){ return "aum_fuji_sep_w"+(weekIdx+1)+"_rorder"; }
+
+function getOrder(key){
   try{
-    var raw = localStorage.getItem(orderKey(weekIdx));
-    if(raw){
-      var arr = JSON.parse(raw);
-      if(Array.isArray(arr) && arr.length===7) return arr;
-    }
+    var raw = localStorage.getItem(key);
+    if(raw){ var arr = JSON.parse(raw); if(Array.isArray(arr) && arr.length===7) return arr; }
   }catch(e){}
   return [0,1,2,3,4,5,6];
 }
-function setSlotOrder(weekIdx, order){
-  try{ localStorage.setItem(orderKey(weekIdx), JSON.stringify(order)); }catch(e){}
+function setOrder(key, order){ try{ localStorage.setItem(key, JSON.stringify(order)); }catch(e){} }
+function removeOrder(key){ try{ localStorage.removeItem(key); }catch(e){} }
+
+function getWeightSlotOrder(weekIdx){ return getOrder(wOrderKey(weekIdx)); }
+function getRunSlotOrder(weekIdx){ return getOrder(rOrderKey(weekIdx)); }
+
+function swapWeightDays(weekIdx, dayA, dayB){
+  var o = getWeightSlotOrder(weekIdx);
+  var t = o[dayA]; o[dayA] = o[dayB]; o[dayB] = t;
+  setOrder(wOrderKey(weekIdx), o);
 }
-function resetSlotOrder(weekIdx){
-  try{ localStorage.removeItem(orderKey(weekIdx)); }catch(e){}
+function swapRunDays(weekIdx, dayA, dayB){
+  var o = getRunSlotOrder(weekIdx);
+  var t = o[dayA]; o[dayA] = o[dayB]; o[dayB] = t;
+  setOrder(rOrderKey(weekIdx), o);
 }
-function isOrderDefault(weekIdx){
-  var order = getSlotOrder(weekIdx);
-  for(var i=0;i<7;i++){ if(order[i]!==i) return false; }
+function resetAllOrders(weekIdx){
+  removeOrder(wOrderKey(weekIdx));
+  removeOrder(rOrderKey(weekIdx));
+}
+function isWeekOrderDefault(weekIdx){
+  var wo = getWeightSlotOrder(weekIdx), ro = getRunSlotOrder(weekIdx);
+  for(var i=0;i<7;i++){ if(wo[i]!==i||ro[i]!==i) return false; }
   return true;
 }
-function getSlot(weekIdx, displayDay){ return getSlotOrder(weekIdx)[displayDay]; }
-function swapDays(weekIdx, dayA, dayB){
-  var order = getSlotOrder(weekIdx);
-  var tmp = order[dayA]; order[dayA] = order[dayB]; order[dayB] = tmp;
-  setSlotOrder(weekIdx, order);
+
+/* ---- public accessors: route each type through its own slot order ---- */
+
+function getWeight(weekIdx, displayDay){
+  var slot = getWeightSlotOrder(weekIdx)[displayDay];
+  return getWeightBySlot(weekIdx, slot);
 }
-
-/* ---- public accessors keyed by calendar day (resolve through slot order) ---- */
-
-function getWeight(weekIdx, displayDay){ return getWeightBySlot(weekIdx, getSlot(weekIdx, displayDay)); }
-function getRun(weekIdx, displayDay){ return getRunBySlot(weekIdx, getSlot(weekIdx, displayDay)); }
+function getRun(weekIdx, displayDay){
+  var slot = getRunSlotOrder(weekIdx)[displayDay];
+  return getRunBySlot(weekIdx, slot);
+}
 
 function getFuel(weekIdx, displayDay){
   var w = getWeight(weekIdx, displayDay);
@@ -1204,71 +1240,150 @@ function renderHero(){
   elHeroRange.textContent = fmtDate(start)+" – "+fmtDate(end);
   $("wn-prev").disabled = state.week<=0;
   $("wn-next").disabled = state.week>=TOTAL_WEEKS-1;
-  elResetOrder.style.display = isOrderDefault(state.week) ? "none" : "block";
+  elResetOrder.style.display = isWeekOrderDefault(state.week) ? "none" : "block";
 }
 
 var dragCtx = null;
+
+function runShortLabel(weekIdx, displayDay){
+  var r = getRun(weekIdx, displayDay);
+  if(r.type==="long") return "LOR";
+  if(r.type==="easy") return "Easy";
+  if(r.type==="quality"){
+    var t = r.title;
+    if(t.indexOf("Tempo")>-1) return "TP";
+    if(t.indexOf("VO2")>-1) return "INV";
+    return "QLT";
+  }
+  if(r.type==="recovery") return "Rec";
+  if(r.type==="choice") return "MP";
+  if(r.type==="mobility") return "Mob";
+  if(r.type==="rest") return "Rest";
+  return r.title;
+}
+function weightShortLabel(weekIdx, displayDay){
+  var w = getWeight(weekIdx, displayDay);
+  if(!w) return "Rest";
+  switch(w.key){
+    case "chest":    return "Che";
+    case "back":     return "Bac";
+    case "shoulder": return "ShoA";
+    case "legs":     return "Leg";
+  }
+  return w.label;
+}
 
 function renderDaySelector(){
   elDaySelector.innerHTML = "";
   var tIdx = todayIndex();
   for(var d=0; d<7; d++){
     var date = dateForDay(state.week,d);
-    var chip = document.createElement("button");
-    chip.className = "day-chip" + (d===state.day ? " active":"") + ((state.week*7+d)===tIdx ? " is-today":"");
-    chip.innerHTML = '<span class="dlabel">'+DAY_SHORT_TH[d]+'</span><span class="dnum">'+date.getDate()+'</span>' + (isDayFullyDone(state.week,d) ? '<span class="dot"></span>' : '');
-    attachChipDrag(chip, d);
+    var isActive = d===state.day;
+    var isToday = (state.week*7+d)===tIdx;
+    var wDone = isWeightDone(state.week,d);
+    var rDone = isRunDone(state.week,d);
+    var hasWeight = !!getWeight(state.week,d);
+
+    var chip = document.createElement("div");
+    chip.className = "day-chip" + (isActive ? " active":"") + (isToday ? " is-today":"");
+    chip.setAttribute("data-day", d);
+
+    var head = '<div class="dc-head"><span class="dc-head-label">'+DAY_SHORT_TH[d]+'</span><span class="dc-head-num">'+date.getDate()+'</span></div>';
+
+    var wLabel = weightShortLabel(state.week, d);
+    var rLabel = runShortLabel(state.week, d);
+    var wRow = '<div class="dc-row weight-row" data-type="weight" data-day="'+d+'"><span class="dc-row-dot"></span>'+wLabel+'</div>';
+    var rRow = '<div class="dc-row run-row" data-type="run" data-day="'+d+'"><span class="dc-row-dot"></span>'+rLabel+'</div>';
+
+    var wDot = '<div class="dc-done-dot'+(hasWeight && wDone ? ' on':'')+'"></div>';
+    var rDot = '<div class="dc-done-dot'+(rDone ? ' on':'')+'"></div>';
+    var dots = '<div class="dc-done-dots">'+(hasWeight ? wDot : '')+ rDot+'</div>';
+
+    chip.innerHTML = head+'<div class="dc-rows">'+wRow+rRow+'</div>'+dots;
+
+    // tap the chip background = select day
+    chip.addEventListener("pointerdown", function(e){
+      if(e.target.closest(".dc-row")) return; // let row handle it
+      state.day = parseInt(this.getAttribute("data-day"), 10);
+      render();
+    });
+
+    // attach drag to each row
+    var wRowEl = chip.querySelector(".weight-row");
+    var rRowEl = chip.querySelector(".run-row");
+    if(wRowEl) attachRowDrag(wRowEl, d, "weight");
+    if(rRowEl) attachRowDrag(rRowEl, d, "run");
+
     elDaySelector.appendChild(chip);
   }
 }
 
-function attachChipDrag(chip, idx){
-  chip.addEventListener("pointerdown", function(e){
-    dragCtx = { chip:chip, startIndex:idx, startX:e.clientX, moved:false, hoverIndex:idx };
-    try{ chip.setPointerCapture(e.pointerId); }catch(err){}
+function attachRowDrag(rowEl, dayIdx, type){
+  rowEl.addEventListener("pointerdown", function(e){
+    e.stopPropagation();
+    dragCtx = { rowEl:rowEl, type:type, startIndex:dayIdx, startX:e.clientX, startY:e.clientY, moved:false, hoverIndex:dayIdx };
+    try{ rowEl.setPointerCapture(e.pointerId); }catch(err){}
   });
-  chip.addEventListener("pointermove", function(e){
-    if(!dragCtx || dragCtx.chip!==chip) return;
+
+  rowEl.addEventListener("pointermove", function(e){
+    if(!dragCtx || dragCtx.rowEl!==rowEl) return;
     var dx = e.clientX - dragCtx.startX;
-    if(!dragCtx.moved && Math.abs(dx) > 8){ dragCtx.moved = true; chip.classList.add("dragging"); }
+    var dy = e.clientY - dragCtx.startY;
+    if(!dragCtx.moved && (Math.abs(dx) > 7 || Math.abs(dy) > 7)){
+      dragCtx.moved = true;
+      rowEl.classList.add("dragging-pill");
+    }
     if(dragCtx.moved){
-      chip.style.transform = "translateX("+dx+"px)";
-      var siblings = Array.prototype.slice.call(elDaySelector.children);
+      rowEl.style.transform = "translateX("+dx+"px)";
+      var chips = Array.prototype.slice.call(elDaySelector.children);
       var hoverIdx = dragCtx.startIndex;
-      siblings.forEach(function(c, ci){
-        c.classList.remove("drop-target");
-        if(c===chip) return;
+      chips.forEach(function(c, ci){
+        var rows = c.querySelectorAll(".dc-row");
+        rows.forEach(function(r){ r.classList.remove("drop-target-row"); });
         var rect = c.getBoundingClientRect();
-        if(e.clientX >= rect.left && e.clientX <= rect.right) hoverIdx = ci;
+        if(e.clientX >= rect.left && e.clientX <= rect.right && ci !== dragCtx.startIndex){
+          hoverIdx = ci;
+          var targetRow = c.querySelector("."+ dragCtx.type +"-row");
+          if(targetRow) targetRow.classList.add("drop-target-row");
+        }
       });
       dragCtx.hoverIndex = hoverIdx;
-      if(hoverIdx !== dragCtx.startIndex) siblings[hoverIdx].classList.add("drop-target");
     }
   });
-  chip.addEventListener("pointerup", function(){
-    if(!dragCtx || dragCtx.chip!==chip) return;
+
+  rowEl.addEventListener("pointerup", function(){
+    if(!dragCtx || dragCtx.rowEl!==rowEl) return;
     var wasMoved = dragCtx.moved;
     var hoverIdx = dragCtx.hoverIndex;
     var startIdx = dragCtx.startIndex;
-    chip.classList.remove("dragging");
-    chip.style.transform = "";
-    Array.prototype.slice.call(elDaySelector.children).forEach(function(c){ c.classList.remove("drop-target"); });
+    var dtype = dragCtx.type;
+    rowEl.classList.remove("dragging-pill");
+    rowEl.style.transform = "";
+    Array.prototype.slice.call(elDaySelector.children).forEach(function(c){
+      c.querySelectorAll(".dc-row").forEach(function(r){ r.classList.remove("drop-target-row"); });
+    });
     dragCtx = null;
-    if(wasMoved && hoverIdx!==startIdx){
-      swapDays(state.week, startIdx, hoverIdx);
+
+    if(wasMoved && hoverIdx !== startIdx){
+      if(dtype === "weight") swapWeightDays(state.week, startIdx, hoverIdx);
+      else swapRunDays(state.week, startIdx, hoverIdx);
       state.day = hoverIdx;
-      showToast("สลับโปรแกรม "+DAY_NAMES_TH[startIdx]+" กับ "+DAY_NAMES_TH[hoverIdx]+" แล้ว");
+      var typeTH = dtype === "weight" ? "Workout" : "Running";
+      showToast("ย้าย "+typeTH+": "+DAY_NAMES_TH[startIdx]+" → "+DAY_NAMES_TH[hoverIdx]);
       render();
     } else if(!wasMoved){
-      state.day = idx;
+      state.day = dayIdx;
       render();
     }
   });
-  chip.addEventListener("pointercancel", function(){
-    if(dragCtx && dragCtx.chip===chip){
-      chip.classList.remove("dragging");
-      chip.style.transform = "";
-      Array.prototype.slice.call(elDaySelector.children).forEach(function(c){ c.classList.remove("drop-target"); });
+
+  rowEl.addEventListener("pointercancel", function(){
+    if(dragCtx && dragCtx.rowEl===rowEl){
+      rowEl.classList.remove("dragging-pill");
+      rowEl.style.transform = "";
+      Array.prototype.slice.call(elDaySelector.children).forEach(function(c){
+        c.querySelectorAll(".dc-row").forEach(function(r){ r.classList.remove("drop-target-row"); });
+      });
       dragCtx = null;
     }
   });
@@ -1463,7 +1578,7 @@ $("btn-today").addEventListener("click", function(){
   render();
 });
 $("reset-order").addEventListener("click", function(){
-  resetSlotOrder(state.week);
+  resetAllOrders(state.week);
   showToast("รีเซ็ตลำดับสัปดาห์นี้แล้ว");
   render();
 });
